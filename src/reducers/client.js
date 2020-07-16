@@ -1,6 +1,6 @@
 import { SET_APP_STATE } from "../actions/types";
 
-export const initialState = {
+const initialState = {
   appState: '',
 }
 

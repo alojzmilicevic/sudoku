@@ -11,7 +11,6 @@ export const toPoint = value => ({
 
 export function getGridSize(width, height) {
   const cur = Math.min(width, height);
-  console.log("Cur: ", cur);
 
   for (let i = 0; i < BoardSizes.length; i++) {
     const val = BoardSizes[i];
