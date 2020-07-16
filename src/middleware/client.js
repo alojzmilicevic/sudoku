@@ -2,7 +2,7 @@ import {
   INIT,
 } from '../actions/types';
 
-import Client from '../lib';
+import Client from '../libs/lib';
 
 export default store => next => (action) => {
   switch (action.type) {
@@ -13,6 +13,7 @@ export default store => next => (action) => {
         store.dispatch,
         action.sudokuId,
       );
+      next(action);
       break;
     default:
       return next(action);

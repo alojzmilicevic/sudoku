@@ -13,6 +13,7 @@ import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
 import reducers from './reducers';
 import client from './middleware/client';
+import sudoku from './middleware/sudoku';
 import apiMiddleware from './middleware/api';
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
@@ -22,7 +23,7 @@ if (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_
   composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 }
 
-const middlewares = [client, apiMiddleware, reduxThunk];
+const middlewares = [client, sudoku, apiMiddleware, reduxThunk];
 const store = createStore(
   reducers, composeEnhancers(applyMiddleware(...middlewares)),
 );

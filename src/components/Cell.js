@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import * as PropTypes from 'prop-types';
-import { addToSelectedCells, clearSelectedCells } from '../api/sudoku';
+import { addToSelectedCells, clearSelectedCells } from '../actions/sudoku';
 import { isCellSelected } from '../reducers/sudoku';
 import useMouseDown from '../hooks/useMouseDown';
 
@@ -49,6 +49,7 @@ const useStyles = makeStyles({
     border: 'solid thin',
     textAlign: 'center',
   },
+
 
   selected: {
     backgroundColor: '#cde6fc',
