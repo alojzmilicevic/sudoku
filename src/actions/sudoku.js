@@ -1,33 +1,35 @@
-import { API_START, API_END, ACCESS_DENIED, API_ERROR, API } from "./types";
+import {
+  API_START, API_END, ACCESS_DENIED, API_ERROR, API,
+} from './types';
 
-export const apiStart = label => ({
+export const apiStart = (label) => ({
   type: API_START,
-  payload: label
+  payload: label,
 });
 
-export const apiEnd = label => ({
+export const apiEnd = (label) => ({
   type: API_END,
-  payload: label
+  payload: label,
 });
 
-export const accessDenied = url => ({
+export const accessDenied = (url) => ({
   type: ACCESS_DENIED,
   payload: {
-    url
-  }
+    url,
+  },
 });
 
-export const apiError = error => ({
+export const apiError = (error) => ({
   type: API_ERROR,
-  error
+  error,
 });
 
 export function apiAction({
-                            url = "", method = "GET", data = null, label = "",
-                            onSuccess = () => {
-                            }, onFailure = () => {
-  }
-                          }) {
+  url = '', method = 'GET', data = null, label = '',
+  onSuccess = () => {
+  }, onFailure = () => {
+  },
+}) {
   return {
     type: API,
     payload: {
@@ -36,7 +38,7 @@ export function apiAction({
       data,
       onSuccess,
       onFailure,
-      label
-    }
+      label,
+    },
   };
 }

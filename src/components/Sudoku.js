@@ -1,12 +1,13 @@
-import React, { useRef } from "react";
-import { connect } from "react-redux";
-import { getData, getSelectedCells } from "../reducers/sudoku";
+import React, { useRef } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { toOneDimension } from "../utilities/util";
-import Cell from "./Cell";
-import { clearSelectedCells, setSudokuData } from "../api/sudoku";
-import useOutsideAlerter from "../hooks/useOutsideAlerter";
-import useKeyPressed from "../hooks/useKeyPressed";
+import * as PropTypes from 'prop-types';
+import { getData, getSelectedCells } from '../reducers/sudoku';
+import { toOneDimension } from '../utilities/util';
+import Cell from './Cell';
+import { clearSelectedCells, setSudokuData } from '../api/sudoku';
+import useOutsideAlerter from '../hooks/useOutsideAlerter';
+import useKeyPressed from '../hooks/useKeyPressed';
 
 const useStyles = makeStyles({
   thickLine: {
@@ -19,8 +20,8 @@ const useStyles = makeStyles({
   },
 
   table: {
-    width: props => props.size,
-    height: props => props.size,
+    width: (props) => props.size,
+    height: (props) => props.size,
     borderCollapse: 'collapse',
     fontFamily: 'Calibri, sans-serif',
     cursor: 'pointer',
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
     border: 'solid medium',
   },
   btm: {
-    borderBottom: 'solid medium'
+    borderBottom: 'solid medium',
   },
 
   td: {
@@ -53,47 +54,57 @@ const Container = (props) => {
 
   const createTableRow = (slice, row) => {
     const cname = (row === 2 || row === 5) ? classes.btm : '';
-    return <tr className={cname} key={row}>
-      {slice.map((val, i) => {
-        const id = toOneDimension([row, i]);
+    return (
+      <tr className={cname} key={row}>
+        {slice.map((val, i) => {
+          const id = toOneDimension([row, i]);
 
-        return <Cell id={id} value={val} key={i} />
-      })}
-    </tr>;
-  }
+          return <Cell id={id} value={val} key={i} />;
+        })}
+      </tr>
+    );
+  };
 
-  return <table ref={wrapperRef} className={classes.table}>
-    <colgroup className={classes.mediumBorder}>
-      <col />
-      <col />
-      <col />
-    </colgroup>
-    <colgroup className={classes.mediumBorder}>
-      <col />
-      <col />
-      <col />
-    </colgroup>
-    <colgroup className={classes.mediumBorder}>
-      <col />
-      <col />
-      <col />
-    </colgroup>
-    <tbody className={classes.mediumBorder}>
-    {
-      Object.entries(data).map(([i, row]) => createTableRow(row, parseInt(i)))
-    }
-    </tbody>
-  </table>;
-}
+  return (
+    <table ref={wrapperRef} className={classes.table}>
+      <colgroup className={classes.mediumBorder}>
+        <col />
+        <col />
+        <col />
+      </colgroup>
+      <colgroup className={classes.mediumBorder}>
+        <col />
+        <col />
+        <col />
+      </colgroup>
+      <colgroup className={classes.mediumBorder}>
+        <col />
+        <col />
+        <col />
+      </colgroup>
+      <tbody className={classes.mediumBorder}>
+        {
+        Object.entries(data).map(([i, row]) => createTableRow(row, parseInt(i, 10)))
+      }
+      </tbody>
+    </table>
+  );
+};
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   clearSelectedCells: () => dispatch(clearSelectedCells()),
   onKeyDown: (value) => dispatch(setSudokuData(value)),
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   getData: () => getData(state),
   getSelectedCells: () => getSelectedCells(state),
 });
+
+Container.propTypes = {
+  getData: PropTypes.func.isRequired,
+  clearSelectedCells: PropTypes.func.isRequired,
+  onKeyDown: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container);

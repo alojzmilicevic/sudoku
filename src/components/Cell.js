@@ -1,10 +1,11 @@
-import React from "react";
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { addToSelectedCells, clearSelectedCells } from "../api/sudoku";
-import { connect } from "react-redux";
-import { isCellSelected } from "../reducers/sudoku";
-import clsx from "clsx";
-import useMouseDown from "../hooks/useMouseDown";
+import { connect } from 'react-redux';
+import clsx from 'clsx';
+import * as PropTypes from 'prop-types';
+import { addToSelectedCells, clearSelectedCells } from '../api/sudoku';
+import { isCellSelected } from '../reducers/sudoku';
+import useMouseDown from '../hooks/useMouseDown';
 
 /*
 function f() {
@@ -39,7 +40,7 @@ const useStyles = makeStyles({
   cellNote: {
     width: '33.33334%',
     height: '33.33334%',
-    display: "flex",
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -55,7 +56,9 @@ const useStyles = makeStyles({
 });
 
 const Cell = (props) => {
-  const { value, addToSelectedCells, id, isSelected, clearSelectedCells } = props;
+  const {
+    value, addToSelectedCells, id, isSelected, clearSelectedCells,
+  } = props;
 
   const classes = useStyles(props);
 
@@ -72,19 +75,32 @@ const Cell = (props) => {
   const className = clsx(classes.td, isSelected(id) && classes.selected);
 
   return (
-    <td onMouseMove={mouseEnter} onMouseDown={() => clearSelectedCells()} onClick={() => addToSelectedCells(id)}
-        className={className}>
+    <td
+      onMouseMove={mouseEnter}
+      onMouseDown={() => clearSelectedCells()}
+      onClick={() => addToSelectedCells(id)}
+      className={className}
+    >
       {useValue && value}
     </td>
-  )
-}
+  );
+};
 
-const mapDispatchToProps = dispatch => ({
+Cell.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  value: PropTypes.any.isRequired,
+  addToSelectedCells: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  isSelected: PropTypes.func.isRequired,
+  clearSelectedCells: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
   addToSelectedCells: (pos) => dispatch(addToSelectedCells(pos)),
   clearSelectedCells: () => dispatch(clearSelectedCells()),
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isSelected: (cell) => isCellSelected(state, cell),
 });
 

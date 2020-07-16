@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './containers/App';
 import { CssBaseline } from '@material-ui/core';
 import { Provider } from 'react-redux';
-import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware, compose } from 'redux';
 import reduxThunk from 'redux-thunk';
-import reducers from './reducers';
-import client from './middleware/client';
-import apiMiddleware from "./middleware/api";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-} from "react-router-dom";
+} from 'react-router-dom';
+import App from './containers/App';
+import * as serviceWorker from './serviceWorker';
+import reducers from './reducers';
+import client from './middleware/client';
+import apiMiddleware from './middleware/api';
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
@@ -39,7 +39,7 @@ ReactDOM.render(
       </Provider>
     </CssBaseline>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

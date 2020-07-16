@@ -10,4 +10,4 @@ export default {
   * */
   API_START: 'API_START',
   API_END: 'API_END',
-}
+};

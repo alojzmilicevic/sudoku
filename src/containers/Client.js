@@ -1,15 +1,15 @@
-import React from "react";
-import Sudoku from "../components/Sudoku";
-import { useWindowSize } from "../hooks/useDimensions";
-import { makeStyles } from "@material-ui/core/styles";
-import { getGridSize } from "../utilities/util";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Sudoku from '../components/Sudoku';
+import { useWindowSize } from '../hooks/useDimensions';
+import { getGridSize } from '../utilities/util';
 
 const useStyles = makeStyles({
   container: {
     display: 'flex',
     backgroundColor: '#fff',
-    width: props => props.width,
-    height: props => props.height,
+    width: (props) => props.width,
+    height: (props) => props.height,
     position: 'absolute',
     flexDirection: 'column',
     textAlign: 'center',
@@ -51,8 +51,8 @@ const useStyles = makeStyles({
     background: 'lightgreen',
     order: 4,
   },
-  "@media (max-width: 1200px)": {
-    wrapper: {  
+  '@media (max-width: 1200px)': {
+    wrapper: {
       display: 'flex',
       flexFlow: 'column',
       textAlign: 'center',
@@ -78,8 +78,8 @@ const Client = (props) => {
         <div className={classes.main}>
           <Sudoku size={size} />
         </div>
-        <div className={classes.aside + " " + classes.aside1}>Aside 1</div>
-        <div className={classes.aside + " " + classes.aside2}>Aside 2</div>
+        <div className={`${classes.aside} ${classes.aside1}`}>Aside 1</div>
+        <div className={`${classes.aside} ${classes.aside2}`}>Aside 2</div>
       </div>
       <footer className={classes.footer}>Footer</footer>
     </div>

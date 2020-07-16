@@ -1,8 +1,6 @@
-import { GridLoader } from "react-spinners";
-import React from "react";
+import { GridLoader } from 'react-spinners';
+import React from 'react';
 
-const LoadingIndicator = () => {
-  return <GridLoader />
-}
+const LoadingIndicator = () => <GridLoader />;
 
 export default LoadingIndicator;
