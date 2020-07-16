@@ -1,8 +1,8 @@
-import { SET_APP_STATE } from "../actions/types";
+import { SET_APP_STATE } from '../actions/types';
 
 const initialState = {
   appState: '',
-}
+};
 
 export default function client(state = initialState, action) {
   switch (action.type) {
@@ -17,4 +17,3 @@ export default function client(state = initialState, action) {
 }
 
 export const getAppState = state => state.client.appState;
-

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { init } from "../actions/client";
-import { connect } from "react-redux";
-import PropTypes from 'prop-types'
-import AppState from "../constants/appStates";
-import LoadingIndicator from "../components/LoadingSpinner";
-import Client from "./Client";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { init } from '../actions/client';
+import AppState from '../constants/appStates';
+import LoadingIndicator from '../components/LoadingSpinner';
+import Client from './Client';
 
 class App extends Component {
   componentDidMount() {
@@ -18,27 +18,25 @@ class App extends Component {
     const { appState } = this.props;
 
     if (appState && appState !== AppState.FETCHING_SESSION) {
-      return <Client />
-    } else {
-
+      return <Client />;
     }
-    return <LoadingIndicator />
+
+    return <LoadingIndicator />;
   }
 }
-
 
 const mapStateToProps = state => ({
   appState: state.client.appState,
 });
 
 const mapDispatchToProps = dispatch => ({
-  init: (sudokuId) => dispatch(init(sudokuId)),
+  init: sudokuId => dispatch(init(sudokuId)),
 });
-
 
 App.propTypes = {
   init: PropTypes.func.isRequired,
-  test: PropTypes.bool,
+  match: PropTypes.objectOf(PropTypes.any).isRequired,
+  appState: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

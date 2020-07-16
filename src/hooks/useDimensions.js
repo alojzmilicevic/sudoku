@@ -15,9 +15,17 @@ function useWindowSize() {
   return { width: size[0], height: size[1] };
 }
 
-function ShowWindowDimensions(props) {
+function ShowWindowDimensions() {
   const [width, height] = useWindowSize();
-  return <span>Window size: {width} x {height}</span>;
+  return (
+    <span>
+      Window size:
+      {width}
+      {' '}
+      x
+      {height}
+    </span>
+  );
 }
 
 export { useWindowSize, ShowWindowDimensions };

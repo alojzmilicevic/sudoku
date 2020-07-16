@@ -1,6 +1,6 @@
-import { INIT, SET_APP_STATE } from "./types";
+import { INIT, SET_APP_STATE } from './types';
 
-export const init = (sudokuId) => ({
+export const init = sudokuId => ({
   type: INIT,
   sudokuId,
 });

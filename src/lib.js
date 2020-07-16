@@ -1,7 +1,7 @@
-import { setAppState } from "./actions/client";
-import { getAppState } from "./reducers/client";
-import AppState from "./constants/appStates";
-import * as SudokuApi from './api/sudoku'
+import { setAppState } from './actions/client';
+import { getAppState } from './reducers/client';
+import AppState from './constants/appStates';
+import * as SudokuApi from './api/sudoku';
 
 export default class Client {
   constructor(store, dispatch, sudokuId) {
@@ -21,11 +21,11 @@ export default class Client {
   }
 
   setAppState(appState) {
-    //const oldAppState = this.getAppState();
+    // const oldAppState = this.getAppState();
     this.dispatch(setAppState(appState));
   }
 
   getAppState() {
     return getAppState(this.store.getState());
-  }w
+  }
 }
