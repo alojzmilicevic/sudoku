@@ -2,53 +2,57 @@ import React from "react";
 import Sudoku from "../components/Sudoku";
 import { useWindowSize } from "../hooks/useDimensions";
 import { makeStyles } from "@material-ui/core/styles";
+import { getGridSize } from "../utilities/util";
 
 const useStyles = makeStyles({
-  wrapper: {
+  container: {
     display: 'flex',
-    flexFlow: 'row wrap',
-    textAlign: 'center',
     backgroundColor: '#fff',
-    height: props => props[1],
-    width: props => props[0],
+    width: props => props.width,
+    height: props => props.height,
     position: 'absolute',
+    flexDirection: 'column',
+    textAlign: 'center',
+    overflow: 'hidden',
   },
+
   header: {
     background: 'tomato',
-    flex: '1 100%',
     position: 'relative',
   },
 
-  footer: {
-    background: 'lightgreen',
-    flex: '1 100%',
-    order: 4,
+  wrapper: {
+    display: 'flex',
+    backgroundColor: '#fff',
+    flex: '1 0 auto',
   },
 
   main: {
     order: 2,
-    flex: '1 0 auto',
+    flex: '1 100%',
     display: 'flex',
     justifyContent: 'center',
-    padding: 10,
+    paddingTop: 80,
   },
 
   aside1: {
     order: 1,
     background: 'gold',
-    flex: '1 100%',
+    flex: '1 0',
   },
 
   aside2: {
     background: 'hotpink',
-    flex: '1 100%',
+    flex: '1 0',
     order: 3,
   },
-  aside: {
-    flex: "1 0 0",
+
+  footer: {
+    background: 'lightgreen',
+    order: 4,
   },
   "@media (max-width: 1200px)": {
-    wrapper: {
+    wrapper: {  
       display: 'flex',
       flexFlow: 'column',
       textAlign: 'center',
@@ -56,25 +60,27 @@ const useStyles = makeStyles({
       boxSizing: 'border-box',
     },
 
+    main: { order: 1 },
     aside1: { order: 2 },
     aside2: { order: 3 },
-    main: { order: 1 },
   },
 });
 
 const Client = (props) => {
-  const size = useWindowSize(props);
-  const classes = useStyles(size);
-  console.log(size);
+  const dimensions = useWindowSize(props);
+  const classes = useStyles(dimensions);
+  const size = getGridSize(dimensions.width, dimensions.height);
 
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.container}>
       <header className={classes.header}>Header</header>
-      <div className={classes.main}>
-        <Sudoku size={500} />
+      <div className={classes.wrapper}>
+        <div className={classes.main}>
+          <Sudoku size={size} />
+        </div>
+        <div className={classes.aside + " " + classes.aside1}>Aside 1</div>
+        <div className={classes.aside + " " + classes.aside2}>Aside 2</div>
       </div>
-      <div className={classes.aside + " " + classes.aside1}>Aside 1</div>
-      <div className={classes.aside + " " + classes.aside2}>Aside 2</div>
       <footer className={classes.footer}>Footer</footer>
     </div>
   );

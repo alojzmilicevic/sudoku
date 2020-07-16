@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import { connect } from "react-redux";
-import { getData } from "../reducers/sudoku";
-import Cell from "./Cell";
+import { getData, getSelectedCells } from "../reducers/sudoku";
 import { makeStyles } from '@material-ui/core/styles';
-import { useMouseInformation } from "../hooks/useMousePosition";
+import { toOneDimension } from "../utilities/util";
+import Cell from "./Cell";
+import { clearSelectedCells, setSudokuData } from "../api/sudoku";
+import useOutsideAlerter from "../hooks/useOutsideAlerter";
+import useKeyPressed from "../hooks/useKeyPressed";
 
 const useStyles = makeStyles({
   thickLine: {
@@ -16,11 +19,11 @@ const useStyles = makeStyles({
   },
 
   table: {
-    fontSize: '2.5em',
-    width: props => props.size + 9,
-    height: props => props.size + 9,
+    width: props => props.size,
+    height: props => props.size,
     borderCollapse: 'collapse',
     fontFamily: 'Calibri, sans-serif',
+    cursor: 'pointer',
   },
   mediumBorder: {
     border: 'solid medium',
@@ -28,31 +31,38 @@ const useStyles = makeStyles({
   btm: {
     borderBottom: 'solid medium'
   },
+
+  td: {
+    border: 'solid thin',
+    textAlign: 'center',
+  },
+
+  selected: {
+    backgroundColor: 'blue',
+  },
 });
 
-
 const Container = (props) => {
-  const { getData, size } = props;
+  const { getData, clearSelectedCells, onKeyDown } = props;
   const classes = useStyles(props);
 
-  useMouseInformation(size);
-
   const data = getData();
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef, clearSelectedCells);
+  useKeyPressed(onKeyDown);
 
   const createTableRow = (slice, row) => {
     const cname = (row === 2 || row === 5) ? classes.btm : '';
     return <tr className={cname} key={row}>
       {slice.map((val, i) => {
-        return <Cell
-          key={i}
-          value={val}
-          position={[row, i]}
-        />
+        const id = toOneDimension([row, i]);
+
+        return <Cell id={id} value={val} key={i} />
       })}
     </tr>;
   }
 
-  return <table className={classes.table}>
+  return <table ref={wrapperRef} className={classes.table}>
     <colgroup className={classes.mediumBorder}>
       <col />
       <col />
@@ -76,9 +86,14 @@ const Container = (props) => {
   </table>;
 }
 
+const mapDispatchToProps = dispatch => ({
+  clearSelectedCells: () => dispatch(clearSelectedCells()),
+  onKeyDown: (value) => dispatch(setSudokuData(value)),
+});
 
 const mapStateToProps = state => ({
   getData: () => getData(state),
+  getSelectedCells: () => getSelectedCells(state),
 });
 
-export default connect(mapStateToProps, null)(Container);
+export default connect(mapStateToProps, mapDispatchToProps)(Container);

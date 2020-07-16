@@ -12,7 +12,7 @@ function useWindowSize() {
     updateSize();
     return () => window.removeEventListener('resize', updateSize);
   }, []);
-  return size;
+  return { width: size[0], height: size[1] };
 }
 
 function ShowWindowDimensions(props) {
