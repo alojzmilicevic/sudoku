@@ -94,7 +94,7 @@ export const getInitialData = state => state.sudoku.initialData;
 export const isCellMutable = (state, pos) => {
   const initialData = getInitialData(state);
 
-  return pos in initialData;
+  return !(pos in initialData);
 };
 
 export const isCellSelected = (state, id) => {
