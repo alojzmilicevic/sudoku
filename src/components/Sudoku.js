@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import * as PropTypes from 'prop-types';
-import { getData, getSelectedCells } from '../reducers/sudoku';
+import { getData } from '../reducers/sudoku';
 import { toOneDimension } from '../utilities/util';
 import Cell from './Cell';
-import { clearSelectedCells, setSudokuData } from '../api/sudoku';
+import { clearSelectedCells, handleKeyDown, handleKeyUp } from '../actions/sudoku';
 import useOutsideAlerter from '../hooks/useOutsideAlerter';
 import useKeyPressed from '../hooks/useKeyPressed';
 
@@ -32,25 +32,18 @@ const useStyles = makeStyles({
   btm: {
     borderBottom: 'solid medium',
   },
-
-  td: {
-    border: 'solid thin',
-    textAlign: 'center',
-  },
-
-  selected: {
-    backgroundColor: 'blue',
-  },
 });
 
 const Container = (props) => {
-  const { getData, clearSelectedCells, onKeyDown } = props;
+  const {
+    getData, clearSelectedCells, onKeyDown, onKeyUp,
+  } = props;
   const classes = useStyles(props);
 
   const data = getData();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, clearSelectedCells);
-  useKeyPressed(onKeyDown);
+  useKeyPressed(onKeyDown, onKeyUp);
 
   const createTableRow = (slice, row) => {
     const cname = (row === 2 || row === 5) ? classes.btm : '';
@@ -93,18 +86,19 @@ const Container = (props) => {
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCells: () => dispatch(clearSelectedCells()),
-  onKeyDown: value => dispatch(setSudokuData(value)),
+  onKeyDown: (value, event) => dispatch(handleKeyDown(value, event)),
+  onKeyUp: (value, event) => dispatch(handleKeyUp(value, event)),
 });
 
 const mapStateToProps = state => ({
   getData: () => getData(state),
-  getSelectedCells: () => getSelectedCells(state),
 });
 
 Container.propTypes = {
   getData: PropTypes.func.isRequired,
   clearSelectedCells: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
+  onKeyUp: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container);

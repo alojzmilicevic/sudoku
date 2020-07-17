@@ -1,70 +1,89 @@
 import { useEffect, useState } from 'react';
 
 const Modifiers = {
-  BACKSPACE: 8,
-  SHIFT: 16,
-  CTRL: 17,
-  ALT: 18,
-  DEL: 46,
+  BACKSPACE: 'Backspace',
+  SHIFT: 'Shift',
+  CTRL: 'Control',
+  ALT: 'Alt',
+  DEL: 'Delete',
+};
+
+export const Directions = {
+  UP: 'up',
+  DOWN: 'down',
+  RIGHT: 'right',
+  LEFT: 'left',
 };
 
 const initialState = {
   [Modifiers.SHIFT]: false,
   [Modifiers.CTRL]: false,
   [Modifiers.ALT]: false,
+  key: 'NaN',
+  direction: 'Nan',
 };
 
-function isModifier(keyCode) {
-  return keyCode === Modifiers.SHIFT || keyCode === Modifiers.CTRL || keyCode === Modifiers.ALT;
+
+const isUpAction = key => key === 'w' || key === 'W' || key === 'ArrowUp';
+const isDownAction = key => key === 's' || key === 'S' || key === 'ArrowDown';
+const isRightAction = key => key === 'd' || key === 'D' || key === 'ArrowRight';
+const isLeftAction = key => key === 'a' || key === 'A' || key === 'ArrowLeft';
+
+function isModifier(key) {
+  return key === Modifiers.SHIFT || key === Modifiers.CTRL || key === Modifiers.ALT;
 }
 
-function modifierDown(e) {
-  return e.shiftKey || e.ctrlKey || e.altKey;
-}
-
-export default function useKeyPressed(callBack) {
+export default function useKeyPressed(onKeyDown, onKeyUp) {
   const [modState, set] = useState(initialState);
 
   useEffect(() => {
     /**
      * Handles keydown events:
-     *
      * if (and only if) keyCode is a modifier, set that modifier to down.
-     *
-     * keyCode 49-57 are numbers 1-9. If we get a key code in this range we need to make sure we dont press a modifier.
-     * This is because special keys like [!, ", ...] share key code values with the numbers 1-9.
      */
     function handleKeyDown(e) {
-      const { keyCode, key } = e;
+      const { key } = e;
 
-      if (isModifier(keyCode)) {
+      if (isModifier(key)) {
         set((prevState) => {
-          prevState[keyCode] = true;
+          prevState[key] = true;
           return prevState;
         });
-      } else if (keyCode >= 49 && keyCode <= 57) {
-        if (!modifierDown(e)) {
-          callBack(key);
-        } else {
-          // set small numbers
-        }
-      } else if (keyCode === Modifiers.BACKSPACE || keyCode === Modifiers.DEL) {
-        callBack(0);
+      } else {
+        set((prevState) => {
+          prevState.key = key;
+          if (isUpAction(key)) {
+            prevState.direction = Directions.UP;
+          } else if (isDownAction(key)) {
+            prevState.direction = Directions.DOWN;
+          } else if (isRightAction(key)) {
+            prevState.direction = Directions.RIGHT;
+          } else if (isLeftAction(key)) {
+            prevState.direction = Directions.LEFT;
+          }
+          return prevState;
+        });
+        onKeyDown(modState);
       }
     }
 
     function handleKeyUp(e) {
-      const { keyCode } = e;
+      const { key } = e;
 
       // If a modifier key is released
-      if (isModifier(keyCode)) {
+      if (isModifier(key)) {
         set((prevState) => {
-          prevState[keyCode] = false;
+          prevState[key] = false;
           return prevState;
         });
+      } else {
+        set((prevState) => {
+          prevState.key = key;
+          return prevState;
+        });
+
+        onKeyUp(modState);
       }
-      e.stopPropagation();
-      e.preventDefault();
     }
 
     // Bind the event listener
@@ -75,7 +94,7 @@ export default function useKeyPressed(callBack) {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [callBack, modState]);
+  }, [modState, onKeyDown, onKeyUp]);
 
   return modState;
 }

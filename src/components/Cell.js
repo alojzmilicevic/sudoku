@@ -3,8 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import * as PropTypes from 'prop-types';
-import { addToSelectedCells, clearSelectedCells } from '../api/sudoku';
-import { isCellSelected } from '../reducers/sudoku';
+import { addToSelectedCells, clearSelectedCells } from '../actions/sudoku';
+import { isCellMutable, isCellSelected } from '../reducers/sudoku';
 import useMouseDown from '../hooks/useMouseDown';
 
 /*
@@ -46,18 +46,50 @@ const useStyles = makeStyles({
   },
 
   td: {
-    border: 'solid thin',
+    border: 'solid thin black',
     textAlign: 'center',
+    fontSize: 50,
+    fontWeight: 100,
+    color: '#616060',
   },
 
   selected: {
     backgroundColor: '#cde6fc',
   },
+
+  mutable: {
+    color: '#508be3',
+    fontWeight: 400,
+  },
+
+  '@media (max-width: 650px)': {
+    td: {
+      fontSize: '40px',
+    },
+  },
+
+  '@media (max-width: 540px)': {
+    td: {
+      fontSize: '30px',
+    },
+  },
+
+  '@media (max-width: 460px)': {
+    td: {
+      fontSize: '20px',
+    },
+  },
+
+  '@media (max-width: 370px)': {
+    td: {
+      fontSize: '10px',
+    },
+  },
 });
 
 const Cell = (props) => {
   const {
-    value, addToSelectedCells, id, isSelected, clearSelectedCells,
+    value, addToSelectedCells, id, isSelected, clearSelectedCells, isMutable,
   } = props;
 
   const classes = useStyles(props);
@@ -72,7 +104,8 @@ const Cell = (props) => {
     }
   };
 
-  const className = clsx(classes.td, isSelected(id) && classes.selected);
+
+  const className = clsx(classes.td, isSelected(id) && classes.selected, isMutable(id) && classes.mutable);
 
   return (
     <td
@@ -93,6 +126,7 @@ Cell.propTypes = {
   id: PropTypes.number.isRequired,
   isSelected: PropTypes.func.isRequired,
   clearSelectedCells: PropTypes.func.isRequired,
+  isMutable: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -102,6 +136,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   isSelected: cell => isCellSelected(state, cell),
+  isMutable: cell => isCellMutable(state, cell),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cell);

@@ -1,9 +1,15 @@
 import {
-  SET_SUDOKU_SESSION, ADD_TO_SELECTED_CELLS, CLEAR_SELECTED, SET_SUDOKU_DATA,
+  SET_SUDOKU_SESSION,
+  ADD_TO_SELECTED_CELLS,
+  CLEAR_SELECTED,
+  SET_SUDOKU_DATA,
+  CHANGE_LAST_SELECTED,
+  SET_SELECTED_TO_LAST_SELECTED,
 } from '../actions/types';
 import { toPoint, toOneDimension } from '../utilities/util';
 
 const initialState = {
+  lastSelected: -1,
   selected: {},
   initialData: {},
 };
@@ -33,12 +39,25 @@ export default function sudoku(state = initialState, action) {
       };
     }
     case ADD_TO_SELECTED_CELLS: {
-      const selected = { ...state.selected, [action.cell]: true };
+      const { cell } = action;
+
+      const selected = { ...state.selected, [cell]: true };
 
       return {
         ...state,
         selected,
+        lastSelected: cell,
       };
+    }
+    case CHANGE_LAST_SELECTED: {
+      return {
+        ...state,
+        lastSelected: action.pos,
+        selected: { [action.pos]: true },
+      };
+    }
+    case SET_SELECTED_TO_LAST_SELECTED: {
+      return { ...state, selected: { [state.lastSelected]: true } };
     }
     case CLEAR_SELECTED: {
       return { ...state, selected: {} };
@@ -58,7 +77,6 @@ export default function sudoku(state = initialState, action) {
 
       return { ...state, ...data };
     }
-
     default:
       return state;
   }
@@ -76,7 +94,7 @@ export const getInitialData = state => state.sudoku.initialData;
 export const isCellMutable = (state, pos) => {
   const initialData = getInitialData(state);
 
-  return pos in initialData;
+  return !(pos in initialData);
 };
 
 export const isCellSelected = (state, id) => {
@@ -84,3 +102,5 @@ export const isCellSelected = (state, id) => {
 
   return selected[id] === true;
 };
+
+export const getLastSelected = state => state.sudoku.lastSelected;
