@@ -35,6 +35,7 @@
       }
     ],
     "linebreak-style": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "react/require-default-props": "off"
   }
 }

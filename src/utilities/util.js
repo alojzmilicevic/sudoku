@@ -1,7 +1,7 @@
 // Transform a point to a one dimensional value
 import { GRID_SIZE, BoardSizes } from '../constants/constants';
 
-export const toOneDimension = point => point[0] * GRID_SIZE + point[1];
+export const toOneDimension = (point, width = GRID_SIZE) => point[0] * width + point[1];
 
 // Transform a 2d point to one dimension
 export const toPoint = value => ({
@@ -21,4 +21,8 @@ export function getGridSize(width, height) {
   }
 
   return BoardSizes[BoardSizes.length - 1];
+}
+
+export function isNotZero(value) {
+  return value !== '0' && value !== 0;
 }

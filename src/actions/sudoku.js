@@ -8,9 +8,18 @@ import {
   HANDLE_KEY_UP,
   SET_SUDOKU_SESSION,
   ADD_TO_SELECTED_CELLS,
-  SET_SUDOKU_DATA, CLEAR_SELECTED, SET_SELECTED_TO_LAST_SELECTED, CHANGE_LAST_SELECTED,
+  SET_SUDOKU_DATA,
+  CLEAR_SELECTED,
+  SET_SELECTED_TO_LAST_SELECTED,
+  CHANGE_LAST_SELECTED,
+  SOLVE_SUDOKU,
+  ON_SOLVE_SUDOKU,
+  ON_FAIL_SUDOKU, SET_DEFAULT_TOOL, SET_CURRENT_TOOL,
 } from './types';
 
+export const solveSudoku = () => ({
+  type: SOLVE_SUDOKU,
+});
 export const setSudoku = data => ({
   type: SET_SUDOKU_SESSION,
   payload: data,
@@ -30,6 +39,17 @@ export const changeLastSelected = pos => ({
   pos,
 });
 
+export const setDefaultTool = tool => ({
+  type: SET_DEFAULT_TOOL,
+  tool,
+});
+
+export const setCurrentTool = tool => ({
+  type: SET_CURRENT_TOOL,
+  tool,
+});
+
+
 export const setSudokuData = value => ({
   type: SET_SUDOKU_DATA,
   value,
@@ -37,6 +57,14 @@ export const setSudokuData = value => ({
 
 export const clearSelectedCells = () => ({
   type: CLEAR_SELECTED,
+});
+
+export const onSolveSudoku = () => ({
+  type: ON_SOLVE_SUDOKU,
+});
+
+export const onFailSudoku = () => ({
+  type: ON_FAIL_SUDOKU,
 });
 
 export const apiStart = label => ({

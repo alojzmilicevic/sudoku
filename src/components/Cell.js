@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import clsx from 'clsx';
 import * as PropTypes from 'prop-types';
 import { addToSelectedCells, clearSelectedCells } from '../actions/sudoku';
-import { isCellMutable, isCellSelected } from '../reducers/sudoku';
+import { getCellData, isCellMutable, isCellSelected } from '../reducers/sudoku';
 import useMouseDown from '../hooks/useMouseDown';
+import { isNotZero } from "../utilities/util";
 
 /*
 function f() {
@@ -89,15 +90,18 @@ const useStyles = makeStyles({
 
 const Cell = (props) => {
   const {
-    value, addToSelectedCells, id, isSelected, clearSelectedCells, isMutable,
+    pos, addToSelectedCells, id, isSelected, clearSelectedCells, isMutable, cellData,
   } = props;
+
+  // eslint-disable-next-line no-unused-vars
+  const { value, color, notes } = cellData(pos);
 
   const classes = useStyles(props);
 
-  const useValue = value !== '0' && value !== 0;
+  const useValue = isNotZero(value);
 
   const down = useMouseDown();
-
+  const selected = isSelected(id);
   const mouseEnter = () => {
     if (down) {
       addToSelectedCells(id);
@@ -105,10 +109,11 @@ const Cell = (props) => {
   };
 
 
-  const className = clsx(classes.td, isSelected(id) && classes.selected, isMutable(id) && classes.mutable);
+  const className = clsx(classes.td, selected && classes.selected, isMutable(id) && classes.mutable);
 
   return (
     <td
+      style={{ backgroundColor: !selected && color }}
       onMouseMove={mouseEnter}
       onMouseDown={() => clearSelectedCells()}
       onClick={() => addToSelectedCells(id)}
@@ -120,13 +125,13 @@ const Cell = (props) => {
 };
 
 Cell.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  value: PropTypes.any.isRequired,
+  pos: PropTypes.arrayOf(PropTypes.number).isRequired,
   addToSelectedCells: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   isSelected: PropTypes.func.isRequired,
   clearSelectedCells: PropTypes.func.isRequired,
   isMutable: PropTypes.func.isRequired,
+  cellData: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -137,6 +142,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   isSelected: cell => isCellSelected(state, cell),
   isMutable: cell => isCellMutable(state, cell),
+  cellData: pos => getCellData(state, pos),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cell);

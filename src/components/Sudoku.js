@@ -6,10 +6,18 @@ import { getData } from '../reducers/sudoku';
 import { toOneDimension } from '../utilities/util';
 import Cell from './Cell';
 import { clearSelectedCells, handleKeyDown, handleKeyUp } from '../actions/sudoku';
-import useOutsideAlerter from '../hooks/useOutsideAlerter';
 import useKeyPressed from '../hooks/useKeyPressed';
 
 const useStyles = makeStyles({
+  table: {
+    width: props => props.size,
+    height: props => props.size,
+    borderCollapse: 'collapse',
+    fontFamily: 'Calibri, sans-serif',
+    cursor: 'pointer',
+    borderBottom: '2px solid red',
+  },
+
   thickLine: {
     display: 'block',
     height: 1,
@@ -17,14 +25,7 @@ const useStyles = makeStyles({
     borderTop: '1px solid #ccc',
     margin: '1em 0',
     padding: 0,
-  },
-
-  table: {
-    width: props => props.size,
-    height: props => props.size,
-    borderCollapse: 'collapse',
-    fontFamily: 'Calibri, sans-serif',
-    cursor: 'pointer',
+    flex: '1 1 auto',
   },
   mediumBorder: {
     border: 'solid medium',
@@ -36,23 +37,22 @@ const useStyles = makeStyles({
 
 const Container = (props) => {
   const {
-    getData, clearSelectedCells, onKeyDown, onKeyUp,
+    data, onKeyDown, onKeyUp,
   } = props;
   const classes = useStyles(props);
 
-  const data = getData();
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, clearSelectedCells);
+  // useOutsideAlerter(wrapperRef, clearSelectedCells);
   useKeyPressed(onKeyDown, onKeyUp);
 
   const createTableRow = (slice, row) => {
     const cname = (row === 2 || row === 5) ? classes.btm : '';
     return (
       <tr className={cname} key={row}>
-        {slice.map((val, i) => {
+        {slice.map((cell, i) => {
           const id = toOneDimension([row, i]);
 
-          return <Cell id={id} value={val} key={i} />;
+          return <Cell id={id} pos={[row, i]} key={i} />;
         })}
       </tr>
     );
@@ -91,14 +91,13 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  getData: () => getData(state),
+  data: getData(state),
 });
 
 Container.propTypes = {
-  getData: PropTypes.func.isRequired,
-  clearSelectedCells: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
   onKeyUp: PropTypes.func.isRequired,
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container);

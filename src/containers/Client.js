@@ -1,8 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import * as PropTypes from 'prop-types';
 import Sudoku from '../components/Sudoku';
 import { useWindowSize } from '../hooks/useDimensions';
 import { getGridSize } from '../utilities/util';
+import { isComplete } from '../reducers/sudoku';
+import Tools from '../components/toolbar/Keyboard';
 
 const useStyles = makeStyles({
   container: {
@@ -32,7 +36,7 @@ const useStyles = makeStyles({
     flex: '1 100%',
     display: 'flex',
     justifyContent: 'center',
-    paddingTop: 80,
+    alignItems: 'center',
   },
 
   aside1: {
@@ -51,6 +55,7 @@ const useStyles = makeStyles({
     background: 'lightgreen',
     order: 4,
   },
+
   '@media (max-width: 1200px)': {
     wrapper: {
       display: 'flex',
@@ -70,13 +75,18 @@ const Client = (props) => {
   const dimensions = useWindowSize(props);
   const classes = useStyles(dimensions);
   const size = getGridSize(dimensions.width, dimensions.height);
+  const { isComplete } = props;
 
   return (
     <div className={classes.container}>
       <header className={classes.header}>Header</header>
       <div className={classes.wrapper}>
+
         <div className={classes.main}>
           <Sudoku size={size} />
+          <Tools size={size} />
+          {isComplete && <div> GOOOD JOB ON COMPLETEING THIS</div>}
+
         </div>
         <div className={`${classes.aside} ${classes.aside1}`}>Aside 1</div>
         <div className={`${classes.aside} ${classes.aside2}`}>Aside 2</div>
@@ -86,4 +96,12 @@ const Client = (props) => {
   );
 };
 
-export default Client;
+Client.propTypes = {
+  isComplete: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => ({
+  isComplete: isComplete(state),
+});
+
+export default connect(mapStateToProps, null)(Client);

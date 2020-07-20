@@ -1,26 +1,12 @@
 import { useEffect, useState } from 'react';
-
-const Modifiers = {
-  BACKSPACE: 'Backspace',
-  SHIFT: 'Shift',
-  CTRL: 'Control',
-  ALT: 'Alt',
-  DEL: 'Delete',
-};
-
-export const Directions = {
-  UP: 'up',
-  DOWN: 'down',
-  RIGHT: 'right',
-  LEFT: 'left',
-};
+import { Directions, Modifiers } from '../constants/keyboard';
 
 const initialState = {
   [Modifiers.SHIFT]: false,
   [Modifiers.CTRL]: false,
   [Modifiers.ALT]: false,
-  key: 'NaN',
-  direction: 'Nan',
+  key: '',
+  direction: '',
 };
 
 
@@ -47,6 +33,7 @@ export default function useKeyPressed(onKeyDown, onKeyUp) {
       if (isModifier(key)) {
         set((prevState) => {
           prevState[key] = true;
+          prevState.key = key;
           return prevState;
         });
       } else {
@@ -63,27 +50,32 @@ export default function useKeyPressed(onKeyDown, onKeyUp) {
           }
           return prevState;
         });
-        onKeyDown(modState);
       }
+      onKeyDown(modState);
+      e.stopPropagation();
+      e.preventDefault();
     }
 
     function handleKeyUp(e) {
       const { key } = e;
-
+      const oldState = { ...modState };
       // If a modifier key is released
       if (isModifier(key)) {
         set((prevState) => {
           prevState[key] = false;
+          prevState.key = '';
           return prevState;
         });
       } else {
         set((prevState) => {
-          prevState.key = key;
+          prevState.key = '';
+          prevState.direction = '';
           return prevState;
         });
-
-        onKeyUp(modState);
       }
+      onKeyUp(oldState);
+      e.stopPropagation();
+      e.preventDefault();
     }
 
     // Bind the event listener
