@@ -112,9 +112,14 @@ export default function sudoku(state = initialState, action) {
           case Tools.COLOR:
             curCell.color = Colors[value - 1];
             break;
-          case Tools.NOTE:
-            curCell.notes.push(value);
+          case Tools.NOTE: {
+            const { notes } = curCell;
+            if (!notes.includes(value)) {
+              notes.push(value);
+              notes.sort();
+            }
             break;
+          }
           default:
             break;
         }
