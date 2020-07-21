@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { MuiThemeProvider } from '@material-ui/core';
 import { init } from '../actions/client';
 import AppState from '../constants/appStates';
 import LoadingIndicator from '../components/LoadingSpinner';
 import Client from './Client';
+import { createTheme } from '../theme/theme';
 
 class App extends Component {
   componentDidMount() {
@@ -17,8 +19,13 @@ class App extends Component {
   render() {
     const { appState } = this.props;
 
+    const appTheme = createTheme();
     if (appState && appState !== AppState.FETCHING_SESSION) {
-      return <Client />;
+      return (
+        <MuiThemeProvider theme={appTheme}>
+          <Client />
+        </MuiThemeProvider>
+      );
     }
 
     return <LoadingIndicator />;

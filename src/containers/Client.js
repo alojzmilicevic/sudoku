@@ -7,7 +7,7 @@ import Keyboard from '../components/toolbar/Keyboard';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   container: {
     position: 'absolute',
     display: 'flex',
@@ -19,6 +19,7 @@ const useStyles = makeStyles({
     left: 0,
     right: 0,
     bottom: 0,
+    fontFamily: theme.typography.fontFamily,
   },
 
   contentWrapper: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles({
     marginTop: 10,
     flexWrap: 'wrap',
   },
-});
+}));
 
 const Client = (props) => {
   const dimensions = useWindowSize(props);
