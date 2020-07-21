@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
@@ -6,28 +6,10 @@ import * as PropTypes from 'prop-types';
 import { addToSelectedCells, clearSelectedCells } from '../actions/sudoku';
 import { getCellData, isCellMutable, isCellSelected } from '../reducers/sudoku';
 import useMouseDown from '../hooks/useMouseDown';
-import { isNotZero } from "../utilities/util";
-
-/*
-function f() {
-  return <div className={className}>
-    {useValue ?
-      <Fragment>
-        {value}
-      </Fragment>
-      :
-      smallNumbers.map(number => (
-        <div className={classes.cellNote}>
-          {number}
-        </div>
-      ))
-    }
-  </div>
-}
-*/
+import { isNotZero } from '../utilities/util';
 
 const useStyles = makeStyles({
-  cellContainer: {
+  notesContainer: {
     position: 'relative',
     width: '100%',
     height: '100%',
@@ -44,23 +26,45 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    fontSize: 20,
   },
 
   td: {
-    border: 'solid thin black',
-    textAlign: 'center',
+    border: 'solid thin #11101063',
+    flex: '1 1 0',
+    height: 720 / 9,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxSizing: 'border-box',
     fontSize: 50,
     fontWeight: 100,
     color: '#616060',
   },
 
   selected: {
-    backgroundColor: '#cde6fc',
+    backgroundColor: 'rgba(205,230,252,0.5)',
   },
 
   mutable: {
     color: '#508be3',
     fontWeight: 400,
+  },
+
+  btm: {
+    borderBottom: '2px solid black',
+  },
+
+  rightBorder: {
+    borderRight: '2px solid black',
+  },
+
+  leftBorder: {
+    borderLeft: '2px solid black',
+  },
+
+  topBorder: {
+    borderTop: '2px solid black',
   },
 
   '@media (max-width: 650px)': {
@@ -69,24 +73,39 @@ const useStyles = makeStyles({
     },
   },
 
-  '@media (max-width: 540px)': {
+  '@media (max-width: 560px)': {
     td: {
       fontSize: '30px',
     },
   },
 
-  '@media (max-width: 460px)': {
+  '@media (max-width: 470px)': {
     td: {
       fontSize: '20px',
     },
   },
 
-  '@media (max-width: 370px)': {
+  '@media (max-width: 380px)': {
     td: {
       fontSize: '10px',
     },
   },
 });
+
+const getClassName = (pos, id, selected, mutable, classes) => {
+  const [y, x] = pos;
+
+  const leftBorder = x === 0;
+  const rightBorder = x === 2 || x === 5 || x === 8;
+  const topBorder = y === 0;
+
+  return clsx(classes.td,
+    selected && classes.selected,
+    mutable && classes.mutable,
+    topBorder && classes.topBorder,
+    rightBorder && classes.rightBorder,
+    leftBorder && classes.leftBorder);
+};
 
 const Cell = (props) => {
   const {
@@ -97,30 +116,49 @@ const Cell = (props) => {
   const { value, color, notes } = cellData(pos);
 
   const classes = useStyles(props);
+  const selected = isSelected(id);
+  const mutable = isMutable(id);
 
+  const className = getClassName(pos, id, selected, mutable, classes);
   const useValue = isNotZero(value);
 
   const down = useMouseDown();
-  const selected = isSelected(id);
   const mouseEnter = () => {
     if (down) {
       addToSelectedCells(id);
     }
   };
 
+  const Notes = () => notes.map((number, i) => (
+    <div className={classes.cellNote} key={i}>
+      {number}
+    </div>
+  ));
 
-  const className = clsx(classes.td, selected && classes.selected, isMutable(id) && classes.mutable);
+  const Data = () => (useValue
+    ? (
+      <Fragment>
+        {value}
+      </Fragment>
+    )
+    : (
+      <div className={classes.notesContainer}>
+        <Notes />
+      </div>
+    ));
 
   return (
-    <td
-      style={{ backgroundColor: !selected && color }}
-      onMouseMove={mouseEnter}
-      onMouseDown={() => clearSelectedCells()}
-      onClick={() => addToSelectedCells(id)}
-      className={className}
-    >
-      {useValue && value}
-    </td>
+    <Fragment>
+      <div
+        style={{ backgroundColor: !selected && color }}
+        onMouseMove={mouseEnter}
+        onMouseDown={() => clearSelectedCells()}
+        onClick={() => addToSelectedCells(id)}
+        className={className}
+      >
+        <Data />
+      </div>
+    </Fragment>
   );
 };
 

@@ -5,7 +5,7 @@ import {
   SET_SUDOKU_DATA,
   CHANGE_LAST_SELECTED,
   SET_SELECTED_TO_LAST_SELECTED, ON_SOLVE_SUDOKU, ON_FAIL_SUDOKU,
-  SET_CURRENT_TOOL, SET_DEFAULT_TOOL,
+  SET_CURRENT_TOOL, SET_DEFAULT_TOOL, CLEAR_CELL_DATA,
 } from '../actions/types';
 import { toPoint, toOneDimension } from '../utilities/util';
 import Tools from '../constants/tools';
@@ -76,6 +76,23 @@ export default function sudoku(state = initialState, action) {
     case CLEAR_SELECTED: {
       return { ...state, selected: {} };
     }
+    case CLEAR_CELL_DATA: {
+      const { data, initialData, selected } = state;
+
+      Object.keys(selected).forEach((pos) => {
+        const { x, y } = toPoint(pos);
+        const curCell = data[y][x];
+
+        if (!(pos in initialData)) {
+          if (curCell.value !== 0) {
+            curCell.value = 0;
+          } else {
+            curCell.notes = [];
+          }
+        }
+      });
+      return { ...state, ...data };
+    }
     case SET_SUDOKU_DATA: {
       const {
         data, initialData, selected, currentTool,
@@ -84,23 +101,19 @@ export default function sudoku(state = initialState, action) {
 
       Object.keys(selected).forEach((pos) => {
         const { x, y } = toPoint(pos);
+        const curCell = data[y][x];
 
         switch (currentTool) {
           case Tools.NUMBER:
             if (!(pos in initialData)) {
-              data[y][x].value = value;
-              console.log(data);
+              curCell.value = value;
             }
             break;
           case Tools.COLOR:
-            if (value !== 0) {
-              data[y][x].color = Colors[value - 1];
-            }
+            curCell.color = Colors[value - 1];
             break;
           case Tools.NOTE:
-            if (value !== 0) {
-              data[y][x].notes.push(value);
-            }
+            curCell.notes.push(value);
             break;
           default:
             break;

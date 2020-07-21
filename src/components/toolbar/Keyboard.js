@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
-import { setSudokuData } from '../../actions/sudoku';
+import { clearCellData } from '../../actions/sudoku';
 import ToolCell from './ToolCell';
 import ControlButton from './ControlButton';
 import Tools from '../../constants/tools';
@@ -59,7 +59,7 @@ const useStyles = makeStyles({
 
 const Keyboard = (props) => {
   const classes = useStyles(props);
-  const { clearCell } = props;
+  const { clearCellData } = props;
 
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -68,7 +68,6 @@ const Keyboard = (props) => {
       {numbers.map(((value, i) => <ToolCell key={i} value={value} />))}
     </div>
   );
-
 
   return (
     <div className={classes.root}>
@@ -79,7 +78,7 @@ const Keyboard = (props) => {
       </div>
       <div className={classes.keyboardContainer}>
         <Grid />
-        <Button disableTouchRipple onClick={() => clearCell()} className={classes.deleteButton}>
+        <Button disableTouchRipple onClick={() => clearCellData()} className={classes.deleteButton}>
           <ClearIcon />
         </Button>
       </div>
@@ -89,11 +88,11 @@ const Keyboard = (props) => {
 };
 
 Keyboard.propTypes = {
-  clearCell: PropTypes.func.isRequired,
+  clearCellData: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
-  clearCell: () => dispatch(setSudokuData(0)),
+  clearCellData: () => dispatch(clearCellData()),
 });
 
 export default connect(null, mapDispatchToProps)(Keyboard);

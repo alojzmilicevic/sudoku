@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Tools from '../../constants/tools';
 import { setSudokuData } from '../../actions/sudoku';
 import { getCurrentTool } from '../../reducers/sudoku';
-import { Colors } from "../../constants/constants";
+import { Colors } from '../../constants/constants';
 
 const useStyles = makeStyles({
   root: {

@@ -9,12 +9,15 @@ import {
   SET_SUDOKU_SESSION,
   ADD_TO_SELECTED_CELLS,
   SET_SUDOKU_DATA,
-  CLEAR_SELECTED,
   SET_SELECTED_TO_LAST_SELECTED,
   CHANGE_LAST_SELECTED,
   SOLVE_SUDOKU,
   ON_SOLVE_SUDOKU,
-  ON_FAIL_SUDOKU, SET_DEFAULT_TOOL, SET_CURRENT_TOOL,
+  ON_FAIL_SUDOKU,
+  SET_DEFAULT_TOOL,
+  SET_CURRENT_TOOL,
+  CLEAR_SELECTED,
+  CLEAR_CELL_DATA,
 } from './types';
 
 export const solveSudoku = () => ({
@@ -49,6 +52,9 @@ export const setCurrentTool = tool => ({
   tool,
 });
 
+export const clearCellData = () => ({
+  type: CLEAR_CELL_DATA,
+});
 
 export const setSudokuData = value => ({
   type: SET_SUDOKU_DATA,

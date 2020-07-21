@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Directions, Modifiers } from '../constants/keyboard';
+import { Directions } from '../constants/keyboard';
 
 const initialState = {
-  [Modifiers.SHIFT]: false,
-  [Modifiers.CTRL]: false,
-  [Modifiers.ALT]: false,
   key: '',
   direction: '',
 };
@@ -15,10 +12,6 @@ const isDownAction = key => key === 's' || key === 'S' || key === 'ArrowDown';
 const isRightAction = key => key === 'd' || key === 'D' || key === 'ArrowRight';
 const isLeftAction = key => key === 'a' || key === 'A' || key === 'ArrowLeft';
 
-function isModifier(key) {
-  return key === Modifiers.SHIFT || key === Modifiers.CTRL || key === Modifiers.ALT;
-}
-
 export default function useKeyPressed(onKeyDown, onKeyUp) {
   const [modState, set] = useState(initialState);
 
@@ -28,29 +21,24 @@ export default function useKeyPressed(onKeyDown, onKeyUp) {
      * if (and only if) keyCode is a modifier, set that modifier to down.
      */
     function handleKeyDown(e) {
-      const { key } = e;
+      let { key } = e;
 
-      if (isModifier(key)) {
-        set((prevState) => {
-          prevState[key] = true;
-          prevState.key = key;
-          return prevState;
-        });
-      } else {
-        set((prevState) => {
-          prevState.key = key;
-          if (isUpAction(key)) {
-            prevState.direction = Directions.UP;
-          } else if (isDownAction(key)) {
-            prevState.direction = Directions.DOWN;
-          } else if (isRightAction(key)) {
-            prevState.direction = Directions.RIGHT;
-          } else if (isLeftAction(key)) {
-            prevState.direction = Directions.LEFT;
-          }
-          return prevState;
-        });
-      }
+      if (e.keyCode >= 49 && e.keyCode <= 57) key = e.keyCode - 48;
+
+      set((prevState) => {
+        prevState.key = key;
+        if (isUpAction(key)) {
+          prevState.direction = Directions.UP;
+        } else if (isDownAction(key)) {
+          prevState.direction = Directions.DOWN;
+        } else if (isRightAction(key)) {
+          prevState.direction = Directions.RIGHT;
+        } else if (isLeftAction(key)) {
+          prevState.direction = Directions.LEFT;
+        }
+        return prevState;
+      });
+
       onKeyDown(modState);
       e.stopPropagation();
       e.preventDefault();
@@ -58,21 +46,14 @@ export default function useKeyPressed(onKeyDown, onKeyUp) {
 
     function handleKeyUp(e) {
       const { key } = e;
-      const oldState = { ...modState };
-      // If a modifier key is released
-      if (isModifier(key)) {
-        set((prevState) => {
-          prevState[key] = false;
-          prevState.key = '';
-          return prevState;
-        });
-      } else {
-        set((prevState) => {
-          prevState.key = '';
-          prevState.direction = '';
-          return prevState;
-        });
-      }
+      const oldState = { ...modState, key };
+
+      set((prevState) => {
+        prevState.key = '';
+        prevState.direction = '';
+        return prevState;
+      });
+
       onKeyUp(oldState);
       e.stopPropagation();
       e.preventDefault();

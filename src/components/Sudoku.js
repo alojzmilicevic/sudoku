@@ -15,23 +15,19 @@ const useStyles = makeStyles({
     borderCollapse: 'collapse',
     fontFamily: 'Calibri, sans-serif',
     cursor: 'pointer',
-    borderBottom: '2px solid red',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
   },
 
-  thickLine: {
-    display: 'block',
-    height: 1,
-    border: 0,
-    borderTop: '1px solid #ccc',
-    margin: '1em 0',
-    padding: 0,
-    flex: '1 1 auto',
-  },
-  mediumBorder: {
-    border: 'solid medium',
-  },
   btm: {
     borderBottom: 'solid medium',
+  },
+
+  row: {
+    width: '100%',
+    display: 'flex',
+    position: 'relative',
   },
 });
 
@@ -46,41 +42,24 @@ const Container = (props) => {
   useKeyPressed(onKeyDown, onKeyUp);
 
   const createTableRow = (slice, row) => {
-    const cname = (row === 2 || row === 5) ? classes.btm : '';
+    const cname = (row === 2 || row === 5 || row === 8) ? classes.btm : '';
     return (
-      <tr className={cname} key={row}>
+      <div className={`${classes.row} ${cname}`} key={row}>
         {slice.map((cell, i) => {
           const id = toOneDimension([row, i]);
 
           return <Cell id={id} pos={[row, i]} key={i} />;
         })}
-      </tr>
+      </div>
     );
   };
 
   return (
-    <table ref={wrapperRef} className={classes.table}>
-      <colgroup className={classes.mediumBorder}>
-        <col />
-        <col />
-        <col />
-      </colgroup>
-      <colgroup className={classes.mediumBorder}>
-        <col />
-        <col />
-        <col />
-      </colgroup>
-      <colgroup className={classes.mediumBorder}>
-        <col />
-        <col />
-        <col />
-      </colgroup>
-      <tbody className={classes.mediumBorder}>
-        {
+    <div ref={wrapperRef} className={classes.table}>
+      {
         Object.entries(data).map(([i, row]) => createTableRow(row, parseInt(i, 10)))
       }
-      </tbody>
-    </table>
+    </div>
   );
 };
 

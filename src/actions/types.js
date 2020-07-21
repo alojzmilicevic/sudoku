@@ -15,6 +15,7 @@ export const ON_SOLVE_SUDOKU = 'ON_SOLVE_SUDOKU';
 export const ON_FAIL_SUDOKU = 'ON_FAIL_SUDOKU';
 export const SET_DEFAULT_TOOL = 'SET_DEFAULT_TOOL';
 export const SET_CURRENT_TOOL = 'SET_CURRENT_TOOL';
+export const CLEAR_CELL_DATA = 'CLEAR_CELL_DATA';
 
 export const HANDLE_KEY_DOWN = 'HANDLE_KEY_DOWN';
 export const HANDLE_KEY_UP = 'HANDLE_KEY_UP';
