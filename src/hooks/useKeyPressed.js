@@ -6,6 +6,7 @@ const initialState = {
   direction: '',
 };
 
+const exceptions = ['c', 'C', 'i', 'I'];
 
 const isUpAction = key => key === 'w' || key === 'W' || key === 'ArrowUp';
 const isDownAction = key => key === 's' || key === 'S' || key === 'ArrowDown';
@@ -21,27 +22,42 @@ export default function useKeyPressed(onKeyDown, onKeyUp) {
      * if (and only if) keyCode is a modifier, set that modifier to down.
      */
     function handleKeyDown(e) {
-      let { key } = e;
+      const {
+        key, ctrlKey, shiftKey, altKey,
+      } = e;
 
-      if (e.keyCode >= 49 && e.keyCode <= 57) key = e.keyCode - 48;
+      // Enable page reload!
+      if (ctrlKey && (key === 'r' || key === 'R')) {
+        window.location.reload();
+      }
+
+      const modifiers = { ctrlKey, shiftKey, altKey };
+
+      let keyValue = key;
+
+      if (e.keyCode >= 49 && e.keyCode <= 57) keyValue = e.keyCode - 48;
 
       set((prevState) => {
-        prevState.key = key;
+        prevState.key = keyValue;
         if (isUpAction(key)) {
           prevState.direction = Directions.UP;
-        } else if (isDownAction(key)) {
+        } else if (isDownAction(keyValue)) {
           prevState.direction = Directions.DOWN;
-        } else if (isRightAction(key)) {
+        } else if (isRightAction(keyValue)) {
           prevState.direction = Directions.RIGHT;
-        } else if (isLeftAction(key)) {
+        } else if (isLeftAction(keyValue)) {
           prevState.direction = Directions.LEFT;
         }
         return prevState;
       });
 
-      onKeyDown(modState);
-      e.stopPropagation();
-      e.preventDefault();
+      onKeyDown(modState, modifiers);
+
+      /* If ctrl & shift are down and exceptions include key */
+      if (!(ctrlKey && shiftKey && exceptions.includes(key))) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }
 
     function handleKeyUp(e) {
@@ -55,8 +71,8 @@ export default function useKeyPressed(onKeyDown, onKeyUp) {
       });
 
       onKeyUp(oldState);
-      e.stopPropagation();
       e.preventDefault();
+      e.stopPropagation();
     }
 
     // Bind the event listener

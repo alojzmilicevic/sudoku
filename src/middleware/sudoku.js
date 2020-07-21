@@ -19,7 +19,7 @@ export default store => next => (action) => {
       break;
     }
     case HANDLE_KEY_DOWN: {
-      sudokuClient.handleKeyDown(action.event);
+      sudokuClient.handleKeyDown(action.event, action.modifiers);
       break;
     }
     case HANDLE_KEY_UP: {

@@ -15,7 +15,6 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     width: props => props.size,
     height: props => props.size,
-    fontFamily: 'Calibri, sans-serif',
     cursor: 'pointer',
   },
 
@@ -58,8 +57,8 @@ const Container = (props) => {
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCells: () => dispatch(clearSelectedCells()),
-  onKeyDown: (value, event) => dispatch(handleKeyDown(value, event)),
-  onKeyUp: (value, event) => dispatch(handleKeyUp(value, event)),
+  onKeyDown: (event, modifiers) => dispatch(handleKeyDown(event, modifiers)),
+  onKeyUp: (event, modifiers) => dispatch(handleKeyUp(event, modifiers)),
 });
 
 const mapStateToProps = state => ({

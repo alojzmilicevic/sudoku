@@ -1,6 +1,6 @@
 import {
   changeLastSelected, onSolveSudoku, setSelectedToLastSelected, setSudokuData,
-  setCurrentTool, clearCellData,
+  setCurrentTool, clearCellData, clearSelectedCells,
 } from '../actions/sudoku';
 import {
   getData, getDefaultTool, getLastSelected, getSelectedCells,
@@ -24,12 +24,7 @@ export default class Client {
   }
 
   handleKeyDown(event) {
-    const {
-      Control, key, direction,
-    } = event;
-
-    // Since we are preventing default behaviour we should allow page reload this way.
-    if (Control && key === 'r') window.location.reload();
+    const { key, direction } = event;
 
     if (key === Modifiers.CTRL) {
       this.dispatch(setCurrentTool(Tools.NUMBER));
@@ -43,6 +38,8 @@ export default class Client {
       this.clearCellData();
     } else if (isMoveKey(key)) {
       this.moveSelected(direction);
+    } else if (key === 'Escape') {
+      this.dispatch(clearSelectedCells());
     }
   }
 
