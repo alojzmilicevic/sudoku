@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
@@ -101,6 +101,7 @@ const getClassName = (pos, id, selected, mutable, classes) => {
   const topBorder = y === 0;
 
   return clsx(classes.td,
+    mutable && classes.mutable,
     selected && classes.selected,
     topBorder && classes.topBorder,
     bottomBorder && classes.bottomBorder,
@@ -139,20 +140,10 @@ const Cell = (props) => {
     </div>
   ));
 
-  const Data = () => (useValue
-    ? (
-      <Fragment>
-        {value}
-      </Fragment>
-    )
-    : (
-      <div className={classes.notesContainer}>
-        <Notes />
-      </div>
-    ));
-
+  const innerClassName = useValue ? '' : classes.notesContainer;
 
   return (
+    // eslint-disable-next-line jsx-a11y/interactive-supports-focus
     <div
       style={{ backgroundColor: !selected && color }}
       onMouseMove={mouseEnter}
@@ -161,7 +152,10 @@ const Cell = (props) => {
       onClick={() => addToSelectedCells(id)}
       role="button"
     >
-      <Data />
+      <div className={innerClassName}>
+        {useValue && value}
+        {!useValue && <Notes />}
+      </div>
     </div>
   );
 };

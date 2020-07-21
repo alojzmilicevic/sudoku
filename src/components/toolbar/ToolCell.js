@@ -44,7 +44,13 @@ const useStyles = makeStyles({
     root: {
       width: 'calc(100% / 5 - 2%)',
       fontSize: '2em',
-      minHeight: 0,
+      minHeight: 62,
+    },
+
+    noteStyle: {
+      fontSize: '1.3em',
+      justifyContent: 'initial',
+      alignItems: 'initial',
     },
   },
 });
