@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   td: {
     border: 'solid thin #11101063',
     flex: '1 1 0',
-    height: 720 / 9,
+    height: props => props.height / 9,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
     fontWeight: 400,
   },
 
-  btm: {
+  bottomBorder: {
     borderBottom: '2px solid black',
   },
 
@@ -97,12 +97,13 @@ const getClassName = (pos, id, selected, mutable, classes) => {
 
   const leftBorder = x === 0;
   const rightBorder = x === 2 || x === 5 || x === 8;
+  const bottomBorder = y === 2 || y === 5 || y === 8;
   const topBorder = y === 0;
 
   return clsx(classes.td,
     selected && classes.selected,
-    mutable && classes.mutable,
     topBorder && classes.topBorder,
+    bottomBorder && classes.bottomBorder,
     rightBorder && classes.rightBorder,
     leftBorder && classes.leftBorder);
 };
@@ -130,7 +131,10 @@ const Cell = (props) => {
   };
 
   const Notes = () => notes.map((number, i) => (
-    <div className={classes.cellNote} key={i}>
+    <div
+      className={classes.cellNote}
+      key={i}
+    >
       {number}
     </div>
   ));
@@ -147,18 +151,18 @@ const Cell = (props) => {
       </div>
     ));
 
+
   return (
-    <Fragment>
-      <div
-        style={{ backgroundColor: !selected && color }}
-        onMouseMove={mouseEnter}
-        onMouseDown={() => clearSelectedCells()}
-        onClick={() => addToSelectedCells(id)}
-        className={className}
-      >
-        <Data />
-      </div>
-    </Fragment>
+    <div
+      style={{ backgroundColor: !selected && color }}
+      onMouseMove={mouseEnter}
+      onMouseDown={() => clearSelectedCells()}
+      className={className}
+      onClick={() => addToSelectedCells(id)}
+      role="button"
+    >
+      <Data />
+    </div>
   );
 };
 

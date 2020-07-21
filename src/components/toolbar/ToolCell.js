@@ -10,8 +10,8 @@ import { Colors } from '../../constants/constants';
 
 const useStyles = makeStyles({
   root: {
-    width: 115,
-    height: 115,
+    minWidth: 115,
+    minHeight: 115,
     backgroundColor: '#e6e6e6',
     color: '#000',
     border: '1px solid #959595',
@@ -23,6 +23,7 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
 
   colorStyle: {
@@ -37,6 +38,14 @@ const useStyles = makeStyles({
 
   text: {
     margin: 10,
+  },
+
+  '@media (max-width: 1200px)': {
+    root: {
+      width: 'calc(100% / 5 - 2%)',
+      fontSize: '2em',
+      minHeight: 0,
+    },
   },
 });
 
@@ -60,6 +69,7 @@ const ToolCell = (props) => {
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/interactive-supports-focus
     <div role="button" onClick={() => setSudokuData(value)} className={className}>
       <span className={classes.text}>
         {currentTool !== Tools.COLOR && value}
