@@ -4,8 +4,8 @@ import Button from '@material-ui/core/Button';
 import * as PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
-import { setDefaultTool } from '../../actions/sudoku';
-import { getCurrentTool } from '../../reducers/sudoku';
+import { getCurrentTool } from '../../reducers/tools';
+import { setDefaultTool } from '../../actions/tools';
 
 const useStyles = makeStyles({
   root: {

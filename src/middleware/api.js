@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { API } from '../actions/types';
 import {
+  API,
   accessDenied, apiError, apiStart, apiEnd,
-} from '../actions/sudoku';
+} from '../actions/api';
+
 
 const apiMiddleware = ({ dispatch }) => next => (action) => {
   next(action);

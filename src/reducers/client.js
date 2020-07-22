@@ -1,10 +1,6 @@
-import { SET_APP_STATE } from '../actions/types';
+import { SET_APP_STATE } from '../actions/client';
 
-const initialState = {
-  appState: '',
-};
-
-export default function client(state = initialState, action) {
+export default function client(state = null, action) {
   switch (action.type) {
     case SET_APP_STATE:
       return {
@@ -16,4 +12,4 @@ export default function client(state = initialState, action) {
   }
 }
 
-export const getAppState = state => state.client.appState;
+export const getAppState = state => state.appState;

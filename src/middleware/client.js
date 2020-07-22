@@ -1,8 +1,5 @@
-import {
-  INIT,
-} from '../actions/types';
-
 import Client from '../libs/lib';
+import { INIT } from '../actions/client';
 
 export default store => next => (action) => {
   switch (action.type) {

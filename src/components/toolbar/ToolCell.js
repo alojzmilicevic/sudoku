@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { connect } from 'react-redux';
 import Tools from '../../constants/tools';
 import { setSudokuData } from '../../actions/sudoku';
-import { getCurrentTool } from '../../reducers/sudoku';
+import { getCurrentTool } from '../../reducers/tools';
 import { Colors } from '../../constants/constants';
 
 const useStyles = makeStyles({

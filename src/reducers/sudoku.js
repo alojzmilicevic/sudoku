@@ -1,26 +1,15 @@
-import {
-  SET_SUDOKU_SESSION,
-  ADD_TO_SELECTED_CELLS,
-  CLEAR_SELECTED,
-  SET_SUDOKU_DATA,
-  CHANGE_LAST_SELECTED,
-  SET_SELECTED_TO_LAST_SELECTED, ON_SOLVE_SUDOKU, ON_FAIL_SUDOKU,
-  SET_CURRENT_TOOL, SET_DEFAULT_TOOL, CLEAR_CELL_DATA,
-} from '../actions/types';
 import { toPoint, toOneDimension } from '../utilities/util';
 import Tools from '../constants/tools';
 import { Colors } from '../constants/constants';
+import {
+  CLEAR_CELL_DATA,
+  ON_FAIL_SUDOKU,
+  ON_SOLVE_SUDOKU,
+  SET_SUDOKU_DATA,
+  SET_SUDOKU_SESSION,
+} from '../actions/sudoku';
 
-const initialState = {
-  lastSelected: -1,
-  selected: {},
-  initialData: {},
-  completed: false,
-  defaultTool: Tools.NUMBER,
-  currentTool: Tools.NUMBER,
-};
-
-export default function sudoku(state = initialState, action) {
+export default function sudoku(state = null, action) {
   switch (action.type) {
     case SET_SUDOKU_SESSION: {
       const { data } = action.payload;
@@ -51,30 +40,6 @@ export default function sudoku(state = initialState, action) {
         data: modifiedData,
         initialData,
       };
-    }
-    case ADD_TO_SELECTED_CELLS: {
-      const { cell } = action;
-
-      const selected = { ...state.selected, [cell]: true };
-
-      return {
-        ...state,
-        selected,
-        lastSelected: cell,
-      };
-    }
-    case CHANGE_LAST_SELECTED: {
-      return {
-        ...state,
-        lastSelected: action.pos,
-        selected: { [action.pos]: true },
-      };
-    }
-    case SET_SELECTED_TO_LAST_SELECTED: {
-      return { ...state, selected: { [state.lastSelected]: true } };
-    }
-    case CLEAR_SELECTED: {
-      return { ...state, selected: {} };
     }
     case CLEAR_CELL_DATA: {
       const { data, initialData, selected } = state;
@@ -133,30 +98,14 @@ export default function sudoku(state = initialState, action) {
     case ON_FAIL_SUDOKU: {
       return { ...state };
     }
-    case SET_CURRENT_TOOL: {
-      const { tool } = action;
 
-      return { ...state, currentTool: tool };
-    }
-    case SET_DEFAULT_TOOL: {
-      const { tool } = action;
-      return {
-        ...state,
-        defaultTool: tool,
-        currentTool: tool,
-      };
-    }
     default:
       return state;
   }
 }
 
-
-export const getDefaultTool = state => state.sudoku.defaultTool;
-export const getCurrentTool = state => state.sudoku.currentTool;
-export const getData = state => state.sudoku.data;
-export const getSelectedCells = state => state.sudoku.selected;
-export const getInitialData = state => state.sudoku.initialData;
+export const getData = state => state.data;
+export const getInitialData = state => state.initialData;
 export const isCellMutable = (state, pos) => {
   const initialData = getInitialData(state);
 
@@ -164,17 +113,9 @@ export const isCellMutable = (state, pos) => {
 };
 
 export const getCellData = (state, pos) => {
-  const { data } = state.sudoku;
+  const { data } = state;
 
   return data[pos[0]][pos[1]];
 };
 
-export const isCellSelected = (state, id) => {
-  const { selected } = state.sudoku;
-
-  return selected[id] === true;
-};
-
-export const isComplete = state => state.sudoku.completed;
-
-export const getLastSelected = state => state.sudoku.lastSelected;
+export const isComplete = state => state.completed;

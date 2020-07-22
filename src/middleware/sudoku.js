@@ -1,10 +1,7 @@
-import {
-  HANDLE_KEY_DOWN,
-  HANDLE_KEY_UP,
-  INIT, SOLVE_SUDOKU,
-} from '../actions/types';
-
+import { INIT } from '../actions/client';
 import Client from '../libs/sudokuLib';
+import { HANDLE_KEY_DOWN, HANDLE_KEY_UP } from '../actions/keys';
+import { SOLVE_SUDOKU } from '../actions/sudoku';
 
 let sudokuClient = null;
 

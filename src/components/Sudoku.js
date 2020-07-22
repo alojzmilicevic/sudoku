@@ -5,8 +5,9 @@ import * as PropTypes from 'prop-types';
 import { getData } from '../reducers/sudoku';
 import { toOneDimension } from '../utilities/util';
 import Cell from './Cell';
-import { clearSelectedCells, handleKeyDown, handleKeyUp } from '../actions/sudoku';
 import useKeyPressed from '../hooks/useKeyPressed';
+import { clearSelectedCells } from '../actions/selected';
+import { handleKeyDown, handleKeyUp } from '../actions/keys';
 
 const useStyles = makeStyles({
   table: {

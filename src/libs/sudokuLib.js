@@ -1,15 +1,19 @@
 import {
-  changeLastSelected, onSolveSudoku, setSelectedToLastSelected, setSudokuData,
-  setCurrentTool, clearCellData, clearSelectedCells,
+  onSolveSudoku, setSudokuData,
+  clearCellData,
 } from '../actions/sudoku';
 import {
-  getData, getDefaultTool, getLastSelected, getSelectedCells,
+  getData,
 } from '../reducers/sudoku';
 import { GRID_SIZE } from '../constants/constants';
 import { toOneDimension } from '../utilities/util';
 
 import Tools from '../constants/tools';
 import { Modifiers, Directions } from '../constants/keyboard';
+import { getDefaultTool } from '../reducers/tools';
+import { getLastSelected, getSelectedCells } from '../reducers/selected';
+import { setCurrentTool } from '../actions/tools';
+import { changeLastSelected, clearSelectedCells, setSelectedToLastSelected } from '../actions/selected';
 
 const MoveKeys = ['a', 'd', 's', 'w', 'A', 'D', 'S', 'W', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 

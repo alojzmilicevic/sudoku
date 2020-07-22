@@ -3,7 +3,8 @@ import { urlHost } from './constants';
 import {
   FETCH_SUDOKU,
 } from '../actions/types';
-import { apiAction, setSudoku } from '../actions/sudoku';
+import { setSudoku } from '../actions/sudoku';
+import { apiAction } from '../actions/api';
 
 const ROUTE = 'sudoku/';
 

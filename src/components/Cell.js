@@ -3,10 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import * as PropTypes from 'prop-types';
-import { addToSelectedCells, clearSelectedCells } from '../actions/sudoku';
-import { getCellData, isCellMutable, isCellSelected } from '../reducers/sudoku';
+import { getCellData, isCellMutable } from '../reducers/sudoku';
 import useMouseDown from '../hooks/useMouseDown';
 import { isNotZero } from '../utilities/util';
+import { isCellSelected } from '../reducers/selected';
+import { addToSelectedCells, clearSelectedCells } from '../actions/selected';
 
 const useStyles = makeStyles({
   notesContainer: {
