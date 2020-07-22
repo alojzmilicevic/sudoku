@@ -73,8 +73,7 @@ export default class Client {
   moveSelected(moveDirection) {
     const selected = getSelectedCells(this.getState());
     const selectedSize = Object.keys(selected).length;
-    const previousLastSelected = getLastSelected(this.getState());
-    let lastSelected = previousLastSelected;
+    let lastSelected = getLastSelected(this.getState());
 
     if (selectedSize > 1) {
       this.dispatch(setSelectedToLastSelected());
@@ -97,16 +96,10 @@ export default class Client {
           break;
       }
 
-      if (lastSelected < 0 || lastSelected > 80) {
-        lastSelected = previousLastSelected;
+      if (lastSelected >= 0 && lastSelected <= 80) {
+        this.dispatch(changeLastSelected(lastSelected));
       }
-
-      this.changeLastSelected(lastSelected);
     }
-  }
-
-  changeLastSelected(value) {
-    this.dispatch(changeLastSelected(value));
   }
 
   getState() {

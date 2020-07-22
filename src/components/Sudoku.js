@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import * as PropTypes from 'prop-types';
@@ -25,15 +25,11 @@ const useStyles = makeStyles({
     boxSizing: 'border-box',
   },
 });
-
-const Container = (props) => {
+const Sudoku = (props) => {
   const {
     data, onKeyDown, onKeyUp, size,
   } = props;
   const classes = useStyles(props);
-
-  const wrapperRef = useRef(null);
-  // useOutsideAlerter(wrapperRef, clearSelectedCells);
   useKeyPressed(onKeyDown, onKeyUp);
 
   const createTableRow = (slice, row) => (
@@ -47,7 +43,7 @@ const Container = (props) => {
   );
 
   return (
-    <div ref={wrapperRef} className={classes.table}>
+    <div className={classes.table}>
       {
         Object.entries(data).map(([i, row]) => createTableRow(row, parseInt(i, 10)))
       }
@@ -64,11 +60,11 @@ const mapStateToProps = state => ({
   data: getData(state),
 });
 
-Container.propTypes = {
+Sudoku.propTypes = {
   size: PropTypes.number.isRequired,
   onKeyUp: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
   data: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Container);
+export default connect(mapStateToProps, mapDispatchToProps)(Sudoku);

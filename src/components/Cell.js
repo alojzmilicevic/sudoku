@@ -21,6 +21,14 @@ const useStyles = makeStyles({
     justifyContent: 'center',
   },
 
+  selectContainer: {
+    position: 'absolute',
+    height: props => (props.height / 9) - 2,
+    width: props => (props.height / 9) - 2,
+    opacity: 0.8,
+    backgroundColor: 'rgb(205,230,252)',
+  },
+
   cellNote: {
     width: '33.33334%',
     height: '33.33334%',
@@ -41,10 +49,6 @@ const useStyles = makeStyles({
     fontSize: 50,
     fontWeight: 100,
     color: '#616060',
-  },
-
-  selected: {
-    backgroundColor: 'rgba(205,230,252,0.5)',
   },
 
   mutable: {
@@ -103,7 +107,6 @@ const getClassName = (pos, id, selected, mutable, classes) => {
 
   return clsx(classes.td,
     mutable && classes.mutable,
-    selected && classes.selected,
     topBorder && classes.topBorder,
     bottomBorder && classes.bottomBorder,
     rightBorder && classes.rightBorder,
@@ -156,17 +159,21 @@ const Cell = (props) => {
   return (
     // eslint-disable-next-line jsx-a11y/interactive-supports-focus
     <div
-      style={{ backgroundColor: !selected && color }}
+      style={{ backgroundColor: color }}
       onMouseMove={mouseMove}
-      onMouseDown={() => clearSelectedCells()}
+      onMouseDown={() => {
+        clearSelectedCells();
+        addToSelectedCells(id);
+      }}
       className={className}
-      onClick={() => addToSelectedCells(id)}
       role="button"
     >
-      <div className={innerClassName}>
+      <div style={{ zIndex: 1 }} className={innerClassName}>
         {useValue && value}
         {!useValue && <Notes />}
       </div>
+
+      <div className={selected ? classes.selectContainer : ''} />
     </div>
   );
 };

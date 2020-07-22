@@ -2,14 +2,13 @@ import {
   ADD_TO_SELECTED_CELLS, CLEAR_SELECTED, CHANGE_LAST_SELECTED, SET_SELECTED_TO_LAST_SELECTED,
 } from '../actions/selected';
 
-
 export default function selected(state = null, action) {
   switch (action.type) {
     case ADD_TO_SELECTED_CELLS: {
       const { id } = action;
       const { selected } = state;
 
-      if (!(id in state.selected)) {
+      if (!(id in selected)) {
         return {
           ...state,
           selected: { ...selected, [id]: true },
@@ -34,7 +33,7 @@ export default function selected(state = null, action) {
       return { ...state, selected: { [lastSelected]: true } };
     }
     case CLEAR_SELECTED: {
-      return { ...state, selected: {} };
+      return { ...state, selected: {}, lastSelected: 0 };
     }
     default:
       return state;

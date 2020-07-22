@@ -50,9 +50,13 @@ export default function sudoku(state = null, action) {
         if (!(pos in initialData)) {
           if (curCell.value !== 0) {
             curCell.value = 0;
-          } else {
+          } else if (curCell.notes.length > 0) {
             curCell.notes = [];
+          } else {
+            curCell.color = '#fff';
           }
+        } else {
+          curCell.color = '#fff';
         }
       });
       return { ...state, ...data };

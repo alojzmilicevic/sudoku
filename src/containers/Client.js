@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import * as PropTypes from 'prop-types';
 import Sudoku from '../components/Sudoku';
 import { useWindowSize } from '../hooks/useDimensions';
 import { getGridSize } from '../utilities/util';
 import Keyboard from '../components/toolbar/Keyboard';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { clearSelectedCells } from '../actions/selected';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -42,13 +45,29 @@ const Client = (props) => {
   const dimensions = useWindowSize(props);
   const classes = useStyles(dimensions);
   const size = getGridSize(dimensions.width, dimensions.height);
+  const { clearSelectedCells } = props;
 
+  const clearCells = (wrapperRef, e, clearSelectedCells) => {
+    if (wrapperRef.current === e.target || !wrapperRef.current.contains(e.target)) {
+      clearSelectedCells();
+    }
+  };
+
+  const wrapperRef = createRef();
   return (
-    <div className={classes.container}>
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <div
+      onMouseDown={e => clearCells(wrapperRef, e, clearSelectedCells)}
+      className={classes.container}
+    >
       <Header />
 
       <div className={classes.contentWrapper}>
-        <div className={classes.main}>
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <div
+          className={classes.main}
+          ref={wrapperRef}
+        >
           <Sudoku size={size} />
           <Keyboard size={size} />
         </div>
@@ -59,4 +78,12 @@ const Client = (props) => {
   );
 };
 
-export default Client;
+Client.propTypes = {
+  clearSelectedCells: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = dispatch => ({
+  clearSelectedCells: () => dispatch(clearSelectedCells()),
+});
+
+export default connect(null, mapDispatchToProps)(Client);
