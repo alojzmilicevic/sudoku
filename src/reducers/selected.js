@@ -6,25 +6,32 @@ import {
 export default function selected(state = null, action) {
   switch (action.type) {
     case ADD_TO_SELECTED_CELLS: {
-      const { cell } = action;
+      const { id } = action;
+      const { selected } = state;
 
-      const selected = { ...state.selected, [cell]: true };
+      if (!(id in state.selected)) {
+        return {
+          ...state,
+          selected: { ...selected, [id]: true },
+          lastSelected: id,
+        };
+      }
 
-      return {
-        ...state,
-        selected,
-        lastSelected: cell,
-      };
+      return state;
     }
     case CHANGE_LAST_SELECTED: {
+      const { id } = action;
+
       return {
         ...state,
-        lastSelected: action.pos,
-        selected: { [action.pos]: true },
+        lastSelected: id,
+        selected: { [id]: true },
       };
     }
     case SET_SELECTED_TO_LAST_SELECTED: {
-      return { ...state, selected: { [state.lastSelected]: true } };
+      const { lastSelected } = state;
+
+      return { ...state, selected: { [lastSelected]: true } };
     }
     case CLEAR_SELECTED: {
       return { ...state, selected: {} };

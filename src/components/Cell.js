@@ -162,13 +162,13 @@ const Cell = (props) => {
 };
 
 Cell.propTypes = {
-  pos: PropTypes.arrayOf(PropTypes.number).isRequired,
-  addToSelectedCells: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
   isSelected: PropTypes.func.isRequired,
-  clearSelectedCells: PropTypes.func.isRequired,
   isMutable: PropTypes.func.isRequired,
   cellData: PropTypes.func.isRequired,
+  addToSelectedCells: PropTypes.func.isRequired,
+  clearSelectedCells: PropTypes.func.isRequired,
+  pos: PropTypes.arrayOf(PropTypes.number).isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({

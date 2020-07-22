@@ -67,10 +67,10 @@ const mapStateToProps = state => ({
 });
 
 Container.propTypes = {
-  onKeyDown: PropTypes.func.isRequired,
-  onKeyUp: PropTypes.func.isRequired,
-  data: PropTypes.objectOf(PropTypes.any).isRequired,
   size: PropTypes.number.isRequired,
+  onKeyUp: PropTypes.func.isRequired,
+  onKeyDown: PropTypes.func.isRequired,
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container);

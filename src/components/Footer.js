@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Footer = (props) => {
+const Footer = () => {
   const classes = useStyles();
   return <div className={classes.footer}> Footer </div>;
 };

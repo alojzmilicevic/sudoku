@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Header = (props) => {
+const Header = () => {
   const classes = useStyles();
   return <div className={classes.header}> Header </div>;
 };

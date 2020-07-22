@@ -44,8 +44,8 @@ const ControlButton = (props) => {
 };
 
 ControlButton.propTypes = {
-  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   currentTool: PropTypes.number.isRequired,
   setDefaultTool: PropTypes.func.isRequired,
 };

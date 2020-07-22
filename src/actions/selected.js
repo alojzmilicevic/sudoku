@@ -3,18 +3,18 @@ export const CHANGE_LAST_SELECTED = 'CHANGE_LAST_SELECTED';
 export const SET_SELECTED_TO_LAST_SELECTED = 'SET_SELECTED_TO_LAST_SELECTED';
 export const CLEAR_SELECTED = 'CLEAR_SELECTED';
 
-export const addToSelectedCells = cell => ({
+export const addToSelectedCells = id => ({
   type: ADD_TO_SELECTED_CELLS,
-  cell,
+  id,
 });
 
 export const setSelectedToLastSelected = () => ({
   type: SET_SELECTED_TO_LAST_SELECTED,
 });
 
-export const changeLastSelected = pos => ({
+export const changeLastSelected = id => ({
   type: CHANGE_LAST_SELECTED,
-  pos,
+  id,
 });
 
 export const clearSelectedCells = () => ({
