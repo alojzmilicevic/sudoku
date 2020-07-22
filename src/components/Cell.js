@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import * as PropTypes from 'prop-types';
 import { getCellData, isCellMutable } from '../reducers/sudoku';
-import useMouseDown from '../hooks/useMouseDown';
 import { isNotZero } from '../utilities/util';
 import { isCellSelected } from '../reducers/selected';
 import { addToSelectedCells, clearSelectedCells } from '../actions/selected';
+import useEventListener from '../hooks/useEventListener';
 
 const useStyles = makeStyles({
   notesContainer: {
@@ -117,20 +117,30 @@ const Cell = (props) => {
 
   // eslint-disable-next-line no-unused-vars
   const { value, color, notes } = cellData(pos);
+  const [down, setDown] = useState(false);
 
-  const classes = useStyles(props);
-  const selected = isSelected(id);
-  const mutable = isMutable(id);
+  const downHandler = useCallback(() => {
+    setDown(true);
+  }, [setDown]);
 
-  const className = getClassName(pos, id, selected, mutable, classes);
-  const useValue = isNotZero(value);
+  const upHandler = useCallback(() => {
+    setDown(false);
+  }, [setDown]);
 
-  const down = useMouseDown();
-  const mouseEnter = () => {
+  useEventListener('mousedown', downHandler);
+  useEventListener('mouseup', upHandler);
+
+  const mouseMove = () => {
     if (down) {
       addToSelectedCells(id);
     }
   };
+  const classes = useStyles(props);
+  const selected = isSelected(id);
+
+  const mutable = isMutable(id);
+  const className = getClassName(pos, id, selected, mutable, classes);
+  const useValue = isNotZero(value);
 
   const Notes = () => notes.map((number, i) => (
     <div
@@ -147,7 +157,7 @@ const Cell = (props) => {
     // eslint-disable-next-line jsx-a11y/interactive-supports-focus
     <div
       style={{ backgroundColor: !selected && color }}
-      onMouseMove={mouseEnter}
+      onMouseMove={mouseMove}
       onMouseDown={() => clearSelectedCells()}
       className={className}
       onClick={() => addToSelectedCells(id)}

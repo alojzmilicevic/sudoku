@@ -6,7 +6,6 @@ import { getData } from '../reducers/sudoku';
 import { toOneDimension } from '../utilities/util';
 import Cell from './Cell';
 import useKeyPressed from '../hooks/useKeyPressed';
-import { clearSelectedCells } from '../actions/selected';
 import { handleKeyDown, handleKeyUp } from '../actions/keys';
 
 const useStyles = makeStyles({
@@ -57,7 +56,6 @@ const Container = (props) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  clearSelectedCells: () => dispatch(clearSelectedCells()),
   onKeyDown: (event, modifiers) => dispatch(handleKeyDown(event, modifiers)),
   onKeyUp: (event, modifiers) => dispatch(handleKeyUp(event, modifiers)),
 });

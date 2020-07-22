@@ -3,7 +3,6 @@ import Tools from '../constants/tools';
 import { Colors } from '../constants/constants';
 import {
   CLEAR_CELL_DATA,
-  ON_FAIL_SUDOKU,
   ON_SOLVE_SUDOKU,
   SET_SUDOKU_DATA,
   SET_SUDOKU_SESSION,
@@ -64,7 +63,12 @@ export default function sudoku(state = null, action) {
       } = state;
       const { value } = action;
 
-      Object.keys(selected).forEach((pos) => {
+      const selectedList = Object.keys(selected);
+
+      // Just return state if nothing can change
+      if (selectedList.length === 0) return state;
+
+      selectedList.forEach((pos) => {
         const { x, y } = toPoint(pos);
         const curCell = data[y][x];
 
@@ -95,10 +99,6 @@ export default function sudoku(state = null, action) {
     case ON_SOLVE_SUDOKU: {
       return { ...state, completed: true };
     }
-    case ON_FAIL_SUDOKU: {
-      return { ...state };
-    }
-
     default:
       return state;
   }
