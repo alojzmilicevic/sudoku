@@ -7,23 +7,35 @@ import {
   SET_SUDOKU_DATA,
   SET_SUDOKU_SESSION,
 } from '../actions/sudoku';
+import { SET_APP_STATE } from '../actions/client';
+import AppState from '../constants/appStates';
 
 export default function sudoku(state = null, action) {
   switch (action.type) {
+    case SET_APP_STATE: {
+      const { appState } = action;
+      const { completed } = state;
+
+      const newCompleted = appState === AppState.GAME_COMPLETED ? true : completed;
+
+      return { ...state, completed: newCompleted };
+    }
     case SET_SUDOKU_SESSION: {
       const { data } = action.payload;
-      const modifiedData = {};
-      const initialData = {};
-
+      const modifiedData = [];
+      const initialData = [];
+      let cellsLeft = 0;
       // Set the initial numbers index (0-80)
       // so that they can't be changed later on when updating cells.
       Object.entries(data).forEach(([rowNumber, row]) => {
         modifiedData[rowNumber] = [];
-        for (let i = 0; i < row.length; i++) {
-          const number = row[i];
+        for (let col = 0; col < row.length; col++) {
+          const number = row[col];
 
           if (number !== 0) {
-            initialData[toOneDimension([rowNumber, i])] = true;
+            initialData[toOneDimension([rowNumber, col])] = true;
+          } else {
+            cellsLeft++;
           }
           modifiedData[rowNumber].push({
             value: number,
@@ -38,18 +50,23 @@ export default function sudoku(state = null, action) {
         ...action.payload,
         data: modifiedData,
         initialData,
+        cellsLeft,
       };
     }
     case CLEAR_CELL_DATA: {
-      const { data, initialData, selected } = state;
+      const {
+        data, initialData, selected, cellsLeft,
+      } = state;
+      let newCellsLeft = cellsLeft;
 
-      Object.keys(selected).forEach((pos) => {
-        const { x, y } = toPoint(pos);
+      selected.forEach((value, i) => {
+        const { x, y } = toPoint(i);
         const curCell = data[y][x];
 
-        if (!(pos in initialData)) {
+        if (!(i in initialData)) {
           if (curCell.value !== 0) {
             curCell.value = 0;
+            newCellsLeft++;
           } else if (curCell.notes.length > 0) {
             curCell.notes = [];
           } else {
@@ -59,27 +76,27 @@ export default function sudoku(state = null, action) {
           curCell.color = '#fff';
         }
       });
-      return { ...state, ...data };
+      return { ...state, ...data, cellsLeft: newCellsLeft };
     }
     case SET_SUDOKU_DATA: {
       const {
-        data, initialData, selected, currentTool,
+        data, initialData, selected, currentTool, cellsLeft, totalSelected,
       } = state;
       const { value } = action;
+      let newCellsLeft = cellsLeft;
 
-      const selectedList = Object.keys(selected);
+      // Just return state if there are no selected cells, since nothing can changed if that's the case
+      if (totalSelected === 0) return state;
 
-      // Just return state if nothing can change
-      if (selectedList.length === 0) return state;
-
-      selectedList.forEach((pos) => {
-        const { x, y } = toPoint(pos);
+      selected.forEach((val, i) => {
+        const { x, y } = toPoint(i);
         const curCell = data[y][x];
 
         switch (currentTool) {
           case Tools.NUMBER:
-            if (!(pos in initialData)) {
+            if (!(i in initialData)) {
               curCell.value = value;
+              newCellsLeft--;
             }
             break;
           case Tools.COLOR:
@@ -98,7 +115,7 @@ export default function sudoku(state = null, action) {
         }
       });
 
-      return { ...state, ...data };
+      return { ...state, ...data, cellsLeft: newCellsLeft };
     }
     case ON_SOLVE_SUDOKU: {
       return { ...state, completed: true };
@@ -115,6 +132,7 @@ export const isCellMutable = (state, pos) => {
 
   return !(pos in initialData);
 };
+export const getCellsLeft = state => state.cellsLeft;
 
 export const getCellData = (state, pos) => {
   const { data } = state;

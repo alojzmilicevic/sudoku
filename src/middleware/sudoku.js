@@ -1,7 +1,7 @@
 import { INIT } from '../actions/client';
 import Client from '../libs/sudokuLib';
 import { HANDLE_KEY_DOWN, HANDLE_KEY_UP } from '../actions/keys';
-import { SOLVE_SUDOKU } from '../actions/sudoku';
+import { SET_SUDOKU_DATA } from '../actions/sudoku';
 
 let sudokuClient = null;
 
@@ -23,7 +23,8 @@ export default store => next => (action) => {
       sudokuClient.handleKeyUp(action.event);
       break;
     }
-    case SOLVE_SUDOKU: {
+    case SET_SUDOKU_DATA: {
+      next(action);
       sudokuClient.solveSudoku();
       break;
     }

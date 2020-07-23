@@ -32,21 +32,19 @@ const Sudoku = (props) => {
   const classes = useStyles(props);
   useKeyPressed(onKeyDown, onKeyUp);
 
-  const createTableRow = (slice, row) => (
-    <div className={classes.row} key={row}>
-      {slice.map((cell, i) => {
-        const id = toOneDimension([row, i]);
+  const createTableRow = (rowValues, rowNumber) => (
+    <div className={classes.row} key={rowNumber}>
+      {rowValues.map((cell, col) => {
+        const id = toOneDimension([rowNumber, col]);
 
-        return <Cell height={size} id={id} pos={[row, i]} key={i} />;
+        return <Cell height={size} id={id} pos={[rowNumber, col]} key={col} />;
       })}
     </div>
   );
 
   return (
     <div className={classes.table}>
-      {
-        Object.entries(data).map(([i, row]) => createTableRow(row, parseInt(i, 10)))
-      }
+      { data.map((row, index) => createTableRow(row, index)) }
     </div>
   );
 };
@@ -64,7 +62,7 @@ Sudoku.propTypes = {
   size: PropTypes.number.isRequired,
   onKeyUp: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
-  data: PropTypes.objectOf(PropTypes.any).isRequired,
+  data: PropTypes.arrayOf(PropTypes.array).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sudoku);

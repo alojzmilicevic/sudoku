@@ -9,6 +9,9 @@ import Keyboard from '../components/toolbar/Keyboard';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { clearSelectedCells } from '../actions/selected';
+import AppState from '../constants/appStates';
+import Modal from '../components/CompletedPuzzleDialog';
+import { setAppState } from '../actions/client';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -45,8 +48,9 @@ const Client = (props) => {
   const dimensions = useWindowSize(props);
   const classes = useStyles(dimensions);
   const size = getGridSize(dimensions.width, dimensions.height);
-  const { clearSelectedCells } = props;
+  const { clearSelectedCells, appState, clearAppState } = props;
 
+  const showCompletedDialog = appState === AppState.GAME_COMPLETED;
   const clearCells = (wrapperRef, e, clearSelectedCells) => {
     if (wrapperRef.current === e.target || !wrapperRef.current.contains(e.target)) {
       clearSelectedCells();
@@ -74,16 +78,24 @@ const Client = (props) => {
       </div>
 
       <Footer />
+      {showCompletedDialog && <Modal onClose={() => clearAppState()} onPlayAnother={() => {}} /> }
     </div>
   );
 };
 
 Client.propTypes = {
   clearSelectedCells: PropTypes.func.isRequired,
+  clearAppState: PropTypes.func.isRequired,
+  appState: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCells: () => dispatch(clearSelectedCells()),
+  clearAppState: () => dispatch(setAppState(AppState.READY_TO_PLAY)),
 });
 
-export default connect(null, mapDispatchToProps)(Client);
+const mapStateToProps = state => ({
+  appState: state.appState,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Client);

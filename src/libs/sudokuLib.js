@@ -1,9 +1,10 @@
 import {
-  onSolveSudoku, setSudokuData,
+  setSudokuData,
   clearCellData,
 } from '../actions/sudoku';
 import {
-  getData,
+  getCellsLeft,
+  getData, isComplete,
 } from '../reducers/sudoku';
 import { GRID_SIZE } from '../constants/constants';
 import { toOneDimension } from '../utilities/util';
@@ -11,9 +12,11 @@ import { toOneDimension } from '../utilities/util';
 import Tools from '../constants/tools';
 import { Modifiers, Directions } from '../constants/keyboard';
 import { getDefaultTool } from '../reducers/tools';
-import { getLastSelected, getSelectedCells } from '../reducers/selected';
+import { getLastSelected, getTotalSelected } from '../reducers/selected';
 import { setCurrentTool } from '../actions/tools';
 import { changeLastSelected, clearSelectedCells, setSelectedToLastSelected } from '../actions/selected';
+import AppState from '../constants/appStates';
+import { setAppState } from '../actions/client';
 
 const MoveKeys = ['a', 'd', 's', 'w', 'A', 'D', 'S', 'W', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
@@ -47,6 +50,19 @@ export default class Client {
     }
   }
 
+  setAppState(appState) {
+    // const oldAppState = this.getAppState();
+
+    switch (appState) {
+      case AppState.GAME_COMPLETED:
+        this.dispatch(setAppState(appState));
+        break;
+
+      default:
+        break;
+    }
+  }
+
   handleKeyUp(event) {
     const { key } = event;
 
@@ -71,11 +87,10 @@ export default class Client {
   }
 
   moveSelected(moveDirection) {
-    const selected = getSelectedCells(this.getState());
-    const selectedSize = Object.keys(selected).length;
+    const totalSelected = getTotalSelected(this.getState());
     let lastSelected = getLastSelected(this.getState());
 
-    if (selectedSize > 1) {
+    if (totalSelected > 1) {
       this.dispatch(setSelectedToLastSelected());
     } else {
       switch (moveDirection) {
@@ -96,9 +111,8 @@ export default class Client {
           break;
       }
 
-      if (lastSelected >= 0 && lastSelected <= 80) {
-        this.dispatch(changeLastSelected(lastSelected));
-      }
+
+      if (lastSelected >= 0 && lastSelected <= 80) this.dispatch(changeLastSelected(lastSelected));
     }
   }
 
@@ -107,7 +121,14 @@ export default class Client {
   }
 
   solveSudoku() {
-    const data = getData(this.getState());
+    const state = this.getState();
+
+    const cellsLeft = getCellsLeft(state);
+    const alreadyCompleted = isComplete(state);
+    // If we just filled in the last cell check if sudoku is correct otherwise return.
+    if (cellsLeft !== 0 || alreadyCompleted) return;
+
+    const data = getData(state);
 
     const box = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     const col = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -118,11 +139,13 @@ export default class Client {
     let correctCol = true;
     let correctBox = true;
 
-    Object.entries(data).forEach(([rowIndex, row]) => {
+    data.forEach((row, index) => {
       let rowSum = 0;
-      row.forEach((value, i) => {
+      row.forEach((cell, i) => {
+        const { value } = cell;
+
         col[i] += value;
-        box[getBox(rowIndex, i)] += value;
+        box[getBox(index, i)] += value;
         rowSum += parseInt(value, 10);
       });
 
@@ -143,7 +166,10 @@ export default class Client {
     }));
 
     if (correctRow && correctCol && correctBox) {
-      this.dispatch(onSolveSudoku());
+      this.setAppState(AppState.GAME_COMPLETED);
+      return;
     }
+
+    alert('fail');
   }
 }

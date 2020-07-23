@@ -10,4 +10,7 @@ export default {
   * */
   API_START: 'API_START',
   API_END: 'API_END',
+
+  // When sudoku game is correct and completed this will be the state.
+  GAME_COMPLETED: 'GAME_COMPLETED',
 };
