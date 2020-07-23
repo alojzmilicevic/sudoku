@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Timer from './Timer';
 
 const useStyles = makeStyles({
   header: {
@@ -7,14 +8,18 @@ const useStyles = makeStyles({
     alignItems: 'center',
     justifyContent: 'center',
     color: '#fff',
-    height: 56,
     backgroundColor: '#333',
+    minHeight: 56,
   },
 });
 
 const Header = () => {
   const classes = useStyles();
-  return <div className={classes.header}> Header </div>;
+  return (
+    <div className={classes.header}>
+      <Timer />
+    </div>
+  );
 };
 
 export default Header;

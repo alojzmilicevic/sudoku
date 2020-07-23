@@ -19,10 +19,10 @@ const useStyles = makeStyles({
   },
 
   selected: {
-    backgroundColor: '#000',
+    backgroundColor: '#333',
     color: 'white',
     '&:hover': {
-      backgroundColor: '#000',
+      backgroundColor: '#333',
     },
   },
 });

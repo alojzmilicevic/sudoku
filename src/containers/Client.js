@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 import Sudoku from '../components/Sudoku';
 import { useWindowSize } from '../hooks/useDimensions';
 import { getGridSize } from '../utilities/util';
-import Keyboard from '../components/toolbar/Keyboard';
+import Keyboard from '../components/keyboard/Keyboard';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { clearSelectedCells } from '../actions/selected';

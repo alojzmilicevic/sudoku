@@ -4,6 +4,8 @@ const en = {
   easy: 'easy',
   medium: 'medium',
   hard: 'hard',
+  playAnother: 'Play another puzzle',
+  quit: 'Quit',
 };
 
 export default en;

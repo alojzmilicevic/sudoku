@@ -4,6 +4,8 @@ const sv = {
   easy: 'enkelt',
   medium: 'medium',
   hard: 'svårt',
+  playAnother: 'Spela ett till sudoku',
+  quit: 'Avsluta',
 };
 
 export default sv;

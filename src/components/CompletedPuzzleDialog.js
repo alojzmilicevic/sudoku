@@ -55,7 +55,6 @@ const Modal = (props) => {
     </IconButton>
   );
 
-
   return (
     <div>
       <Dialog open>
@@ -70,10 +69,10 @@ const Modal = (props) => {
           </Typography>
           <br />
           <Button disableRipple onClick={() => onPlayAnother()} className={classes.button} variant="outlined" color="primary">
-            Play another puzzle
+            {strings.playAnother}
           </Button>
           <Button disableRipple onClick={() => onClose()} className={classes.button} variant="outlined" color="primary">
-            Quit
+            {strings.quit}
           </Button>
         </div>
       </Dialog>
