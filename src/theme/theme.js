@@ -2,9 +2,13 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 
 const defaultBranding = {
-  primaryColor: '#95c0de',
-  secondaryColor: '#deae95',
+  primaryColor: '#272d36',
+  secondaryColor: '#1f242b',
+  thirdColor: '#95c0de',
   darkColor: '#333',
+};
+const secondaryBranding = {
+  main: '#fff',
 };
 
 export const createTheme = () => createMuiTheme({
@@ -13,6 +17,10 @@ export const createTheme = () => createMuiTheme({
       main: defaultBranding.primaryColor,
       secondary: defaultBranding.secondaryColor,
       darkColor: defaultBranding.darkColor,
+      thirdColor: defaultBranding.thirdColor,
+    },
+    secondary: {
+      main: secondaryBranding.main,
     },
   },
   additionalPalette: {

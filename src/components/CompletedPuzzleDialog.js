@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   star: {
     height: theme.spacing(10),
     width: '100%',
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.thirdColor,
   },
 
   head: {
