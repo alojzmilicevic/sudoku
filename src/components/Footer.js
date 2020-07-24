@@ -61,7 +61,7 @@ const Footer = () => {
     <div className={classes.footerWrapper}>
       <div className={classes.footer}>
         <div className={classes.about}>
-          <Typography className={classes.text} variant="button">about the Doo. games</Typography>
+          <Typography className={classes.text} variant="button">about the Yasc. games</Typography>
           <br />
           <Typography>
             The game first appeared in Japan in 1984 where it was given the name “Sudoku,” which is short for a
@@ -74,7 +74,7 @@ const Footer = () => {
       </div>
       <div className={classes.faded}>
         <div className={classes.links}>
-          {`© ${year} Doo. Media Productions | Privacy Policy | Site Map | Doo.com`}
+          {`© ${year} Yasc. Media Productions | Privacy Policy | Site Map | Doo.com`}
         </div>
         <GitIcon />
         <FacebookIcon />
