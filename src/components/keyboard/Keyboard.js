@@ -1,9 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import * as PropTypes from 'prop-types';
 import ToolCell from './ToolCell';
-import ControlButton from './ControlButton';
 import Tools from '../../constants/tools';
 import ClearButton from '../ClearButton';
+import Button from '../Button';
+import { setDefaultTool } from '../../actions/tools';
+import { getCurrentTool } from '../../reducers/tools';
 
 const useStyles = makeStyles({
   root: {
@@ -48,6 +52,10 @@ const useStyles = makeStyles({
 const Keyboard = (props) => {
   const classes = useStyles(props);
 
+  const {
+    currentTool, setNumberTool, setNotesTool, setColorTool,
+  } = props;
+
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   const Grid = () => (
@@ -61,9 +69,9 @@ const Keyboard = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.control}>
-        <ControlButton name="Normal" id={Tools.NUMBER} />
-        <ControlButton name="Note" id={Tools.NOTE} />
-        <ControlButton name="Color" id={Tools.COLOR} />
+        <Button onClick={() => setNumberTool()} text="Normal" selected={currentTool === Tools.NUMBER} />
+        <Button onClick={() => setNotesTool()} text="Note" selected={currentTool === Tools.NOTE} />
+        <Button onClick={() => setColorTool()} text="Color" selected={currentTool === Tools.COLOR} />
       </div>
       <div className={classes.keyboardContainer}>
         <Grid />
@@ -72,4 +80,21 @@ const Keyboard = (props) => {
   );
 };
 
-export default Keyboard;
+Keyboard.propTypes = {
+  currentTool: PropTypes.number.isRequired,
+  setNumberTool: PropTypes.func.isRequired,
+  setNotesTool: PropTypes.func.isRequired,
+  setColorTool: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = dispatch => ({
+  setNumberTool: () => dispatch(setDefaultTool(Tools.NUMBER)),
+  setNotesTool: () => dispatch(setDefaultTool(Tools.NOTE)),
+  setColorTool: () => dispatch(setDefaultTool(Tools.COLOR)),
+});
+
+const mapStateToProps = state => ({
+  currentTool: getCurrentTool(state),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Keyboard);

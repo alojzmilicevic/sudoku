@@ -1,13 +1,13 @@
 import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import MuiCloseIcon from '@material-ui/icons/Close';
 import StarsIcon from '@material-ui/icons/Stars';
 import * as PropTypes from 'prop-types';
 import strings from '../strings/main';
+import Button from './Button';
 
 const useStyles = makeStyles(theme => ({
   dialog: {
@@ -36,13 +36,6 @@ const useStyles = makeStyles(theme => ({
   head: {
     fontWeight: 550,
   },
-
-  button: {
-    width: '90%',
-    minHeight: 40,
-    marginTop: theme.spacing(1),
-    color: 'black',
-  },
 }));
 
 const Modal = (props) => {
@@ -68,12 +61,8 @@ const Modal = (props) => {
             {`${strings.formatString(strings.puzzleFinished, strings.easy, '12.02')}!`}
           </Typography>
           <br />
-          <Button disableRipple onClick={() => onPlayAnother()} className={classes.button} variant="outlined" color="primary">
-            {strings.playAnother}
-          </Button>
-          <Button disableRipple onClick={() => onClose()} className={classes.button} variant="outlined" color="primary">
-            {strings.quit}
-          </Button>
+          <Button onClick={() => onPlayAnother()} text={strings.playAnother} />
+          <Button onClick={() => onClose()} text={strings.quit} />
         </div>
       </Dialog>
     </div>

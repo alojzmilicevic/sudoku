@@ -25,6 +25,7 @@ const useStyles = makeStyles({
     boxSizing: 'border-box',
   },
 });
+
 const Sudoku = (props) => {
   const {
     data, onKeyDown, onKeyUp, size,
