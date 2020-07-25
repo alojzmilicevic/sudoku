@@ -1,7 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Timer from './Timer';
-import Settings from './Settings';
 import logo from '../assets/yasconly-light.png';
 
 const useStyles = makeStyles(theme => ({
@@ -35,10 +33,6 @@ const Header = () => {
   return (
     <div className={classes.header}>
       <img alt="logo" className={classes.logo} src={logo} />
-      <div className={classes.other}>
-        <Timer />
-        <Settings />
-      </div>
     </div>
   );
 };

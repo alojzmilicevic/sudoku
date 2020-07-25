@@ -12,6 +12,8 @@ import { clearSelectedCells } from '../actions/selected';
 import AppState from '../constants/appStates';
 import Modal from '../components/CompletedPuzzleDialog';
 import { setAppState } from '../actions/client';
+import Options from '../components/Options';
+import TitleBar from '../components/TitleBar';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -65,7 +67,8 @@ const Client = (props) => {
       className={classes.container}
     >
       <Header />
-
+      <TitleBar />
+      <Options />
       <div className={classes.contentWrapper}>
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
         <div

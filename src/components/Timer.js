@@ -32,18 +32,19 @@ const useStyles = makeStyles({
   timerContainer: {
     display: 'flex',
     alignItems: 'center',
+    cursor: 'default',
+    maxWidth: 100,
   },
 
   timer: {
-    fontSize: 20,
+    fontSize: 24,
   },
 
   button: {
-    color: 'white',
-    backgroundColor: 'transparent',
+    color: '#575757',
 
     '&:hover': {
-      color: '#e3dcdc',
+      color: '#333',
       backgroundColor: 'transparent',
     },
   },
@@ -69,12 +70,12 @@ const Timer = (props) => {
 
   const StartButton = () => (
     <Button onClick={() => setActive(true)} className={classes.button}>
-      <PlayArrowIcon />
+      <PlayArrowIcon style={{ width: 30, height: 30 }} />
     </Button>
   );
   const PauseButton = () => (
     <Button onClick={() => setActive(false)} className={classes.button}>
-      <PauseIcon />
+      <PauseIcon style={{ width: 30, height: 30 }} />
     </Button>
   );
 

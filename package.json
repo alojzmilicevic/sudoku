@@ -11,7 +11,6 @@
     "@testing-library/user-event": "^7.2.1",
     "@welldone-software/why-did-you-render": "^4.2.6",
     "clsx": "^1.1.1",
-    "fireworks": "^2.2.6",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -16,6 +16,7 @@ const useStyles = makeStyles({
     width: props => props.size,
     height: props => props.size,
     cursor: 'pointer',
+    alignItems: 'center',
   },
 
   row: {

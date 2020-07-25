@@ -1,5 +1,6 @@
 // Transform a point to a one dimensional value
 import { GRID_SIZE, BoardSizes } from '../constants/constants';
+import strings from '../strings/main';
 
 export const toOneDimension = (point, width = GRID_SIZE) => point[0] * width + point[1];
 
@@ -25,4 +26,11 @@ export function getGridSize(width, height) {
 
 export function isNotZero(value) {
   return value !== '0' && value !== 0;
+}
+
+export function getDateInfo() {
+  const today = new Date();
+  console.log(today.getDay());
+
+  return { day: today.getDay(), month: strings.months[today.getMonth() + 1] };
 }

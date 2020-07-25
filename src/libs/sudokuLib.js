@@ -167,9 +167,6 @@ export default class Client {
 
     if (correctRow && correctCol && correctBox) {
       this.setAppState(AppState.GAME_COMPLETED);
-      return;
     }
-
-    alert('fail');
   }
 }
