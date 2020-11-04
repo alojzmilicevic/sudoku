@@ -63,7 +63,7 @@ const Footer = () => {
         <div className={classes.about}>
           <Typography className={classes.text} variant="button">about the Yasc. games</Typography>
           <br />
-          <Typography>
+          <Typography variant="body2">
             The game first appeared in Japan in 1984 where it was given the name “Sudoku,” which is short for a
             longer expression in Japanese – “Sūji wa dokushin ni kagiru” – which means, “the digits are limited to one
             occurrence.” Sudoku continues to be highly popular in Japan, where people buy over 600,000 Sudoku magazines

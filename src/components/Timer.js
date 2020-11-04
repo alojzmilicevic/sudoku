@@ -3,19 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import PauseIcon from '@material-ui/icons/Pause';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Button from '@material-ui/core/Button';
-
-function formatDurationMMSS(duration) {
-  const totalSeconds = Math.floor(duration);
-  let hours = Math.floor(totalSeconds / 3600);
-  let minutes = Math.floor((totalSeconds / 60) % 60);
-  let seconds = Math.floor(totalSeconds % 60);
-
-  if (hours < 10) hours = `0${hours}`;
-  if (minutes < 10) minutes = `0${minutes}`;
-  if (seconds < 10) seconds = `0${seconds}`;
-
-  return `${hours}:${minutes}:${seconds}`;
-}
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getTimer } from '../reducers/sudoku';
+import { incrementTime } from '../actions/sudoku';
+import { formatTime } from '../utilities/util';
 
 /**
  * Function to measure the duration of the call
@@ -23,7 +15,7 @@ function formatDurationMMSS(duration) {
  */
 function duration(time) {
   if (time != null) {
-    return formatDurationMMSS(time);
+    return formatTime(time);
   }
   return '00:00';
 }
@@ -51,22 +43,22 @@ const useStyles = makeStyles({
 });
 
 const Timer = (props) => {
-  const [seconds, setSeconds] = useState(0);
   const [active, setActive] = useState(true);
-
   const classes = useStyles(props);
+  const { time, setTime } = props;
+
 
   useEffect(() => {
     let interval = null;
     if (active) {
       interval = setInterval(() => {
-        setSeconds(seconds => seconds + 1);
+        setTime();
       }, 1000);
-    } else if (!active && seconds !== 0) {
+    } else if (!active && time !== 0) {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [active, seconds]);
+  }, [active, time, setTime]);
 
   const StartButton = () => (
     <Button onClick={() => setActive(true)} className={classes.button}>
@@ -82,11 +74,24 @@ const Timer = (props) => {
   return (
     <div className={classes.timerContainer}>
       <span className={classes.timer}>
-        {duration(seconds)}
+        {duration(time)}
       </span>
       {active ? <PauseButton /> : <StartButton />}
     </div>
   );
 };
 
-export default Timer;
+const mapStateToProps = state => ({
+  time: getTimer(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+  setTime: () => dispatch(incrementTime()),
+});
+
+Timer.propTypes = {
+  time: PropTypes.number.isRequired,
+  setTime: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timer);

@@ -34,7 +34,7 @@ ReactDOM.render(
       <Provider store={store}>
         <Router>
           <Switch>
-            <Route exact path="/:sudokuId" render={props => <App {...props} />} />
+            <Route exact path="/" render={props => <App {...props} />} />
           </Switch>
         </Router>
       </Provider>

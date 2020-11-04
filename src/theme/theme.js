@@ -9,6 +9,7 @@ const defaultBranding = {
 };
 const secondaryBranding = {
   main: '#fff',
+  secondary: '#505050',
 };
 
 export const createTheme = () => createMuiTheme({
@@ -21,6 +22,7 @@ export const createTheme = () => createMuiTheme({
     },
     secondary: {
       main: secondaryBranding.main,
+      dark: secondaryBranding.secondary,
     },
   },
   additionalPalette: {
@@ -34,5 +36,9 @@ export const createTheme = () => createMuiTheme({
   },
   typography: {
     fontFamily: 'Calibri, sans-serif',
+    fontSize: 18,
+    button: {
+      padding: '6px 14px',
+    },
   },
 });

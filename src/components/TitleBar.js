@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import * as PropTypes from 'prop-types';
 import { getDateInfo } from '../utilities/util';
 
 const useStyles = makeStyles(theme => ({
@@ -16,20 +15,13 @@ const useStyles = makeStyles(theme => ({
   },
 
   row: {
-    paddingLeft: 12,
-    paddingRight: 12,
     maxWidth: 1280,
-    marginLeft: 'auto',
-    marginRight: '30%',
-    width: '100%',
-  },
-
-  o: {
     flex: '1 1 auto',
     padding: 0,
     border: 0,
     verticalAlign: 'baseline',
     fontSize: '100%',
+    margin: '0 auto',
   },
 
   text: {
@@ -45,6 +37,8 @@ const useStyles = makeStyles(theme => ({
     fontSize: 56,
     fontWeight: 'bold',
     marginRight: 16,
+    marginLeft: 16,
+    padding: '8px 14px',
   },
 
   smallText: {
@@ -62,19 +56,15 @@ const TitleBar = (props) => {
   return (
     <div className={classes.titleBar}>
       <div className={classes.row}>
-        <div className={classes.o}>
-          <h2 className={classes.text}>
-            <em className={classes.bigText}>
-              {' '}
-              Sudoku
-            </em>
-            <span className={classes.smallText}>
-              {`${month} ${day}`}
-            </span>
-          </h2>
-        </div>
+        <h2 className={classes.text}>
+          <em className={classes.bigText}>
+            Sudoku
+          </em>
+          <span className={classes.smallText}>
+            {`${month} ${day}`}
+          </span>
+        </h2>
       </div>
-
     </div>
   );
 };

@@ -92,7 +92,7 @@ const useStyles = makeStyles({
 
   '@media (max-width: 380px)': {
     td: {
-      fontSize: '10px',
+      fontSize: '15px',
     },
   },
 });

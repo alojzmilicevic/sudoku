@@ -1,57 +1,96 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import * as PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Timer from './Timer';
+import { showModal } from '../actions/modal';
+import { MODAL_TYPES } from './modals/Modal';
+import { getShowClock } from '../reducers/settings';
+import strings from '../strings/main';
+import TextButton from './buttons/TextButton';
+import DifficultyOption from './LevelBar';
+import { useWindowSize } from '../hooks/useDimensions';
+import { clearBoard, solveCell, solveSudoku } from '../actions/sudoku';
+import MenuBar from './MenuBar';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   options: {
     borderBottom: '1px solid #a2a2a2',
-    minHeight: 56,
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
   },
   row: {
-    paddingLeft: 12,
-    paddingRight: 12,
     maxWidth: 1280,
-    marginLeft: 'auto',
-    marginRight: '30%',
-    width: '100%',
+    margin: '0 auto',
+    flex: '1 1 auto',
   },
 
   optionsRow: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    fontSize: '1.1rem',
   },
 }));
 
-const Options = (props) => {
+const Options = React.forwardRef((props, ref) => {
   const classes = useStyles(props);
+  const {
+    openSettings, showTimer, clearBoard, openHowToPlay, solvePuzzle, solveCell,
+  } = props;
+  const { width } = useWindowSize();
+
+  const showTimerInOptions = width > 1000;
+
+  const buttonData = [
+    { text: strings.optionsBar.solveCell, onClick: solveCell },
+    { text: strings.optionsBar.solvePuzzle, onClick: solvePuzzle },
+    { text: strings.optionsBar.reset, onClick: clearBoard },
+    { text: strings.optionsBar.howToPlay, onClick: openHowToPlay },
+  ];
+
+  const buttons = buttonData.map((data, index) => (
+    <TextButton key={`help${index}`} onClick={data.onClick}>
+      {data.text}
+    </TextButton>
+  ));
 
   return (
-    <div className={classes.options}>
+    <div ref={ref} className={classes.options}>
       <div className={classes.row}>
         <div className={classes.optionsRow}>
-          <div style={{ display: 'inline-block' }}>
-            <span style={{ marginRight: 20, fontSize: 20 }}> Easy </span>
-            <span style={{ marginRight: 20, fontSize: 20 }}> Medium </span>
-            <span style={{ fontSize: 20 }}> Hard </span>
-          </div>
-          <div style={{ display: 'inline-block' }}>
-            <Timer />
-          </div>
-          <div style={{ display: 'inline-block' }}>
-            <span style={{ marginRight: 20, fontSize: 20 }}> Help </span>
-            <span style={{ fontSize: 20 }}> Settings </span>
+          <DifficultyOption />
+          {showTimerInOptions && showTimer && <Timer />}
+          <div>
+            <MenuBar placement="bottom-end" buttonText={strings.optionsBar.help} buttons={buttons} showBorder />
+            <TextButton onClick={openSettings}>{strings.optionsBar.settings}</TextButton>
           </div>
         </div>
       </div>
     </div>
   );
+});
+
+Options.propTypes = {
+  openSettings: PropTypes.func.isRequired,
+  openHowToPlay: PropTypes.func.isRequired,
+  clearBoard: PropTypes.func.isRequired,
+  solvePuzzle: PropTypes.func.isRequired,
+  solveCell: PropTypes.func.isRequired,
+  showTimer: PropTypes.bool.isRequired,
 };
 
-Options.propTypes = {};
+const mapStateToProps = state => ({
+  showTimer: getShowClock(state),
+});
 
-export default Options;
+const mapDispatchToProps = dispatch => ({
+  openSettings: () => dispatch(showModal(MODAL_TYPES.SETTINGS)),
+  openHowToPlay: () => dispatch(showModal(MODAL_TYPES.HOW_TO_PLAY)),
+  clearBoard: () => dispatch(clearBoard()),
+  solvePuzzle: () => dispatch(solveSudoku()),
+  solveCell: () => dispatch(solveCell()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Options);

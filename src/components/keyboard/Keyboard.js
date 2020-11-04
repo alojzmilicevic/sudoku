@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 import ToolCell from './ToolCell';
 import Tools from '../../constants/tools';
 import ClearButton from '../ClearButton';
-import Button from '../Button';
+import Button from '../buttons/Button';
 import { setDefaultTool } from '../../actions/tools';
 import { getCurrentTool } from '../../reducers/tools';
 

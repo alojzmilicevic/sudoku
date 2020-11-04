@@ -6,8 +6,11 @@ import IconButton from '@material-ui/core/IconButton';
 import MuiCloseIcon from '@material-ui/icons/Close';
 import StarsIcon from '@material-ui/icons/Stars';
 import * as PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import strings from '../strings/main';
-import Button from './Button';
+import Button from './buttons/Button';
+import { getLevel, getTimer } from '../reducers/sudoku';
+import { formatTime } from '../utilities/util';
 
 const useStyles = makeStyles(theme => ({
   dialog: {
@@ -40,7 +43,9 @@ const useStyles = makeStyles(theme => ({
 
 const Modal = (props) => {
   const classes = useStyles();
-  const { onClose, onPlayAnother } = props;
+  const {
+    onClose, onPlayAnother, level, time,
+  } = props;
 
   const CloseIcon = ({ onClose }) => (
     <IconButton onClick={() => onClose()} className={classes.closeButton}>
@@ -58,7 +63,7 @@ const Modal = (props) => {
             {`${strings.congrats}!`}
           </Typography>
           <Typography style={{ textAlign: 'center' }} variant="h6">
-            {`${strings.formatString(strings.puzzleFinished, strings.easy, '12.02')}!`}
+            {`${strings.formatString(strings.puzzleFinished, strings.optionsBar[level], formatTime(time))}!`}
           </Typography>
           <br />
           <Button onClick={() => onPlayAnother()} text={strings.playAnother} />
@@ -73,6 +78,13 @@ const Modal = (props) => {
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onPlayAnother: PropTypes.func.isRequired,
+  level: PropTypes.string.isRequired,
+  time: PropTypes.number.isRequired,
 };
 
-export default Modal;
+const mapStateToProps = state => ({
+  level: getLevel(state),
+  time: getTimer(state),
+});
+
+export default connect(mapStateToProps)(Modal);

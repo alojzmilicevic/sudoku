@@ -4,17 +4,33 @@ import sudoku from './sudoku';
 import tools from './tools';
 import selected from './selected';
 import Tools from '../constants/tools';
+import modal from './modal';
+import settings, { settingsInitialState } from './settings';
+import { Levels } from '../constants/levels';
+
+const initialBoardData = {
+  initialData: [],
+  cellsLeft: -1,
+  data: [],
+  completed: false,
+};
 
 const initialState = {
-  initialData: [],
-  completed: false,
+  boards: {
+    [Levels.EASY]: { ...initialBoardData },
+    [Levels.MEDIUM]: { ...initialBoardData },
+    [Levels.HARD]: { ...initialBoardData },
+  },
+  level: Levels.EASY,
   defaultTool: Tools.NUMBER,
   currentTool: Tools.NUMBER,
   appState: '',
-  cellsLeft: 0, // Cells left to fill until sudoku is completed
-  totalSelected: 0,
   selected: [],
+  totalSelected: 0,
   lastSelected: 0,
+  modalType: null,
+  modalProps: {},
+  settings: { ...settingsInitialState },
 };
 
-export default reduceReducers(initialState, selected, client, sudoku, tools);
+export default reduceReducers(initialState, selected, client, sudoku, tools, modal, settings);

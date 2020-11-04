@@ -1,11 +1,37 @@
+import { Levels } from '../constants/levels';
+
 const en = {
   congrats: 'Congrats',
   puzzleFinished: 'You finished an {0} puzzle in {1}',
-  easy: 'easy',
-  medium: 'medium',
-  hard: 'hard',
   playAnother: 'Play another puzzle',
   quit: 'Quit',
+
+  settings: {
+    header: 'Settings',
+    showClock: 'Show Clock',
+  },
+
+  optionsBar: {
+    [Levels.EASY]: 'Easy',
+    [Levels.MEDIUM]: 'Medium',
+    [Levels.HARD]: 'Hard',
+    help: 'Help',
+    settings: 'Settings',
+    reset: 'Reset Board',
+    solvePuzzle: 'Solve Puzzle',
+    solveCell: 'Solve Cell',
+    howToPlay: 'How To Play?',
+  },
+
+  modals: {
+    howToPlayHeader: 'How To Play',
+    howToPlayText: 'Fill the grid with your keyboard so that every row, '
+      + 'column and 3×3 box contains the digits 1 to 9, without repeating.\n\n'
+      + 'Use Normal Mode to enter numbers you are confident about. '
+      + 'Use Note Mode to add or remove multiple possibilities for a square. '
+      + 'Use Color mode to add or remove colors to squares\n\n'
+      + '3 Sudokus (Easy, Medium, and Hard) are released daily at 10:00 p.m. ET.',
+  },
 
   months: {
     1: 'January',

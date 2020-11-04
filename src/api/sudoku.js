@@ -9,7 +9,7 @@ import { apiAction } from '../actions/api';
 const ROUTE = 'sudoku/';
 
 export const fetchSudoku = id => apiAction({
-  url: urlHost + ROUTE + id,
+  url: urlHost + ROUTE,
   onSuccess: setSudoku,
   onFailure: () => console.error('Error occured loading articles'),
   label: FETCH_SUDOKU,

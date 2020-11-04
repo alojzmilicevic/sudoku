@@ -30,7 +30,19 @@ export function isNotZero(value) {
 
 export function getDateInfo() {
   const today = new Date();
-  console.log(today.getDay());
 
-  return { day: today.getDay(), month: strings.months[today.getMonth() + 1] };
+  return { day: today.getDate(), month: strings.months[today.getMonth() + 1] };
+}
+
+export function formatTime(duration) {
+  const totalSeconds = Math.floor(duration);
+  let hours = Math.floor(totalSeconds / 3600);
+  let minutes = Math.floor((totalSeconds / 60) % 60);
+  let seconds = Math.floor(totalSeconds % 60);
+
+  if (hours < 10) hours = `0${hours}`;
+  if (minutes < 10) minutes = `0${minutes}`;
+  if (seconds < 10) seconds = `0${seconds}`;
+
+  return `${hours}:${minutes}:${seconds}`;
 }

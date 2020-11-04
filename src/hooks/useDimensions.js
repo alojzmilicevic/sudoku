@@ -1,11 +1,11 @@
 import React, { useLayoutEffect, useState } from 'react';
 
 function useWindowSize() {
-  const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
+  const [size, setSize] = useState([document.body.clientWidth, window.innerHeight]);
 
   useLayoutEffect(() => {
     function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
+      setSize([document.body.clientWidth, window.innerHeight]);
     }
 
     window.addEventListener('resize', updateSize);
@@ -22,7 +22,6 @@ function ShowWindowDimensions() {
     <span>
       Window size:
       {width}
-      {' '}
       x
       {height}
     </span>

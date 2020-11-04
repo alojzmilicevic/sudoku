@@ -14,6 +14,10 @@ import Modal from '../components/CompletedPuzzleDialog';
 import { setAppState } from '../actions/client';
 import Options from '../components/Options';
 import TitleBar from '../components/TitleBar';
+import ModalRoot from '../components/modals/Modal';
+import Timer from '../components/Timer';
+import { getShowClock } from '../reducers/settings';
+import { getAppState } from '../reducers/client';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -34,6 +38,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     backgroundColor: '#fff',
     flex: '1 0 auto',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 
   main: {
@@ -50,27 +56,38 @@ const Client = (props) => {
   const dimensions = useWindowSize(props);
   const classes = useStyles(dimensions);
   const size = getGridSize(dimensions.width, dimensions.height);
-  const { clearSelectedCells, appState, clearAppState } = props;
+  const {
+    clearSelectedCells, appState, clearAppState, showTimer,
+  } = props;
 
   const showCompletedDialog = appState === AppState.GAME_COMPLETED;
-  const clearCells = (wrapperRef, e, clearSelectedCells) => {
-    if (wrapperRef.current === e.target || !wrapperRef.current.contains(e.target)) {
+
+  const clearCells = (wrapperRef, e, clearSelectedCells, okRef) => {
+    const shouldClear = (wrapperRef.current === e.target
+      || !wrapperRef.current.contains(e.target))
+      && !okRef.current.contains(e.target);
+
+    if (shouldClear) {
       clearSelectedCells();
     }
   };
 
+  const showTimerInMainWindow = dimensions.width <= 1000;
+
   const wrapperRef = createRef();
+  const okRef = createRef();
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
-      onMouseDown={e => clearCells(wrapperRef, e, clearSelectedCells)}
+      onMouseDown={e => clearCells(wrapperRef, e, clearSelectedCells, okRef)}
       className={classes.container}
     >
+      <ModalRoot />
       <Header />
       <TitleBar />
-      <Options />
+      <Options ref={okRef} />
       <div className={classes.contentWrapper}>
-        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        {showTimerInMainWindow && showTimer && <Timer />}
         <div
           className={classes.main}
           ref={wrapperRef}
@@ -81,7 +98,11 @@ const Client = (props) => {
       </div>
 
       <Footer />
-      {showCompletedDialog && <Modal onClose={() => clearAppState()} onPlayAnother={() => {}} /> }
+      {showCompletedDialog && (
+        <Modal
+          onClose={() => clearAppState()}
+        />
+      )}
     </div>
   );
 };
@@ -90,6 +111,7 @@ Client.propTypes = {
   clearSelectedCells: PropTypes.func.isRequired,
   clearAppState: PropTypes.func.isRequired,
   appState: PropTypes.string.isRequired,
+  showTimer: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -98,7 +120,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  appState: state.appState,
+  appState: getAppState(state),
+  showTimer: getShowClock(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Client);

@@ -4,11 +4,11 @@ import {
 } from '../actions/sudoku';
 import {
   getCellsLeft,
-  getData, isComplete,
+  getData,
+  isComplete,
 } from '../reducers/sudoku';
 import { GRID_SIZE } from '../constants/constants';
 import { toOneDimension } from '../utilities/util';
-
 import Tools from '../constants/tools';
 import { Modifiers, Directions } from '../constants/keyboard';
 import { getDefaultTool } from '../reducers/tools';
@@ -110,7 +110,6 @@ export default class Client {
         default:
           break;
       }
-
 
       if (lastSelected >= 0 && lastSelected <= 80) this.dispatch(changeLastSelected(lastSelected));
     }
