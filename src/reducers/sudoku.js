@@ -18,7 +18,6 @@ import { solveSudoku } from '../libs/sudokuSolver';
 function transformData(board) {
   let cellsLeft = 0;
   const data = [];
-  const initialData = [];
 
   // Set the initial numbers index (0-80)
   // so that they can't be changed later on when updating cells.
@@ -26,22 +25,24 @@ function transformData(board) {
     data[rowNumber] = [];
     for (let col = 0; col < row.length; col++) {
       const number = row[col];
-
-      if (number !== 0) {
-        initialData[toOneDimension([rowNumber, col])] = true;
-      } else {
-        cellsLeft++;
-      }
-      data[rowNumber].push({
+      const cell = {
         value: number,
         color: '#fff',
         notes: [],
-      });
+        preFilled: false,
+      };
+
+      if (number !== 0) {
+        cell.preFilled = true;
+      } else {
+        cellsLeft++;
+      }
+      data[rowNumber].push(cell);
     }
   });
 
   return {
-    cellsLeft, data, initialData, time: 0, // Some redux weirdness doesn't allow setting time in initial state
+    cellsLeft, data, time: 0, // Some redux weirdness doesn't allow setting time in initial state
   };
 }
 
@@ -90,7 +91,7 @@ export default function sudoku(state = null, action) {
         boards, level, selected,
       } = state;
 
-      const { cellsLeft, initialData, data } = boards[level];
+      const { cellsLeft, data } = boards[level];
 
       let newCellsLeft = cellsLeft;
 
@@ -98,7 +99,7 @@ export default function sudoku(state = null, action) {
         const { x, y } = toPoint(i);
         const curCell = data[y][x];
 
-        if (!(i in initialData)) {
+        if (!curCell.preFilled) {
           if (curCell.value !== 0) {
             curCell.value = 0;
             newCellsLeft++;
@@ -121,7 +122,7 @@ export default function sudoku(state = null, action) {
         boards, level, selected, currentTool, totalSelected,
       } = state;
       const { value } = action;
-      const { cellsLeft, initialData, data } = boards[level];
+      const { cellsLeft, data } = boards[level];
 
       let newCellsLeft = cellsLeft;
 
@@ -135,7 +136,7 @@ export default function sudoku(state = null, action) {
         switch (currentTool) {
           case Tools.NUMBER:
             // Don't replace cells that are part of the initial data.
-            if (!(i in initialData)) {
+            if (!curCell.preFilled) {
               if (curCell.value === 0) {
                 newCellsLeft--;
               }
@@ -237,15 +238,8 @@ export function getCurrentBoard(state) {
 }
 
 export const getData = state => getCurrentBoard(state).data;
-export const getInitialData = state => getCurrentBoard(state).initialData;
 export const getCellsLeft = state => getCurrentBoard(state).cellsLeft;
 export const getCellData = (state, pos) => getCurrentBoard(state).data[pos[0]][pos[1]];
 export const getTimer = state => getCurrentBoard(state).time;
-
-export const isCellMutable = (state, pos) => {
-  const initialData = getInitialData(state);
-
-  return !(pos in initialData);
-};
 
 export const isComplete = state => getCurrentBoard(state).completed;

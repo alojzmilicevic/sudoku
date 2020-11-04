@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import * as PropTypes from 'prop-types';
-import { getCellData, isCellMutable } from '../reducers/sudoku';
+import { getCellData } from '../reducers/sudoku';
 import { isNotZero } from '../utilities/util';
 import { isCellSelected } from '../reducers/selected';
 import { addToSelectedCells, clearSelectedCells } from '../actions/selected';
@@ -115,11 +115,13 @@ const getClassName = (pos, id, selected, mutable, classes) => {
 
 const Cell = (props) => {
   const {
-    pos, addToSelectedCells, id, isSelected, clearSelectedCells, isMutable, cellData,
+    pos, addToSelectedCells, id, isSelected, clearSelectedCells, cellData,
   } = props;
 
   // eslint-disable-next-line no-unused-vars
-  const { value, color, notes } = cellData(pos);
+  const {
+    value, color, notes, preFilled,
+  } = cellData(pos);
   const [down, setDown] = useState(false);
 
   const downHandler = useCallback(() => {
@@ -141,8 +143,7 @@ const Cell = (props) => {
   const classes = useStyles(props);
   const selected = isSelected(id);
 
-  const mutable = isMutable(id);
-  const className = getClassName(pos, id, selected, mutable, classes);
+  const className = getClassName(pos, id, selected, !preFilled, classes);
   const useValue = isNotZero(value);
 
   const Notes = () => notes.map((number, i) => (
@@ -180,7 +181,6 @@ const Cell = (props) => {
 
 Cell.propTypes = {
   isSelected: PropTypes.func.isRequired,
-  isMutable: PropTypes.func.isRequired,
   cellData: PropTypes.func.isRequired,
   addToSelectedCells: PropTypes.func.isRequired,
   clearSelectedCells: PropTypes.func.isRequired,
@@ -195,7 +195,6 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   isSelected: cell => isCellSelected(state, cell),
-  isMutable: cell => isCellMutable(state, cell),
   cellData: pos => getCellData(state, pos),
 });
 

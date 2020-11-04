@@ -9,7 +9,6 @@ import settings, { settingsInitialState } from './settings';
 import { Levels } from '../constants/levels';
 
 const initialBoardData = {
-  initialData: [],
   cellsLeft: -1,
   data: [],
   completed: false,
