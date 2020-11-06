@@ -6,7 +6,14 @@ export default function selected(state = null, action) {
   switch (action.type) {
     case ADD_TO_SELECTED_CELLS: {
       const { id } = action;
-      const { selected, totalSelected } = state;
+      const {
+        selected, totalSelected, boards, level,
+      } = state;
+      const { completed } = boards[level];
+
+      if (completed) {
+        return state;
+      }
 
       const newSelected = selected.slice();
       newSelected[id] = true;
@@ -19,10 +26,15 @@ export default function selected(state = null, action) {
           totalSelected: totalSelected + 1,
         };
       }
-
       return state;
     }
     case CHANGE_LAST_SELECTED: {
+      const { boards, level } = state;
+      const { completed } = boards[level];
+
+      if (completed) {
+        return state;
+      }
       const { id } = action;
       const newSelected = [];
       newSelected[id] = true;
@@ -35,7 +47,12 @@ export default function selected(state = null, action) {
       };
     }
     case SET_SELECTED_TO_LAST_SELECTED: {
-      const { lastSelected } = state;
+      const { lastSelected, boards, level } = state;
+      const { completed } = boards[level];
+
+      if (completed) {
+        return state;
+      }
       const newSelected = [];
       newSelected[lastSelected] = true;
 

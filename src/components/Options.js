@@ -4,13 +4,15 @@ import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Timer from './Timer';
 import { showModal } from '../actions/modal';
-import { MODAL_TYPES } from './modals/Modal';
+import { ModalTypes } from './modals/Modal';
 import { getShowClock } from '../reducers/settings';
 import strings from '../strings/main';
 import TextButton from './buttons/TextButton';
 import DifficultyOption from './LevelBar';
 import { useWindowSize } from '../hooks/useDimensions';
-import { clearBoard, solveCell, solveSudoku } from '../actions/sudoku';
+import {
+  clearBoard, solveCell, solveSudoku,
+} from '../actions/sudoku';
 import MenuBar from './MenuBar';
 
 const useStyles = makeStyles(() => ({
@@ -46,15 +48,29 @@ const Options = React.forwardRef((props, ref) => {
   const buttonData = [
     { text: strings.optionsBar.solveCell, onClick: solveCell },
     { text: strings.optionsBar.solvePuzzle, onClick: solvePuzzle },
-    { text: strings.optionsBar.reset, onClick: clearBoard },
+    { text: strings.optionsBar.reset, onClick: clearBoard, color: '#a2a2a2' },
     { text: strings.optionsBar.howToPlay, onClick: openHowToPlay },
   ];
 
-  const buttons = buttonData.map((data, index) => (
-    <TextButton key={`help${index}`} onClick={data.onClick}>
-      {data.text}
-    </TextButton>
-  ));
+  const buttons = buttonData.map((data, index) => {
+    if (data.color) {
+      return (
+        <TextButton
+          style={{ width: '100%' }}
+          borderColor={data.color}
+          key={`help${index}`}
+          onClick={data.onClick}
+        >
+          {data.text}
+        </TextButton>
+      );
+    }
+    return (
+      <TextButton key={`help${index}`} onClick={data.onClick}>
+        {data.text}
+      </TextButton>
+    );
+  });
 
   return (
     <div ref={ref} className={classes.options}>
@@ -86,8 +102,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  openSettings: () => dispatch(showModal(MODAL_TYPES.SETTINGS)),
-  openHowToPlay: () => dispatch(showModal(MODAL_TYPES.HOW_TO_PLAY)),
+  openSettings: () => dispatch(showModal(ModalTypes.SETTINGS)),
+  openHowToPlay: () => dispatch(showModal(ModalTypes.HOW_TO_PLAY)),
   clearBoard: () => dispatch(clearBoard()),
   solvePuzzle: () => dispatch(solveSudoku()),
   solveCell: () => dispatch(solveCell()),

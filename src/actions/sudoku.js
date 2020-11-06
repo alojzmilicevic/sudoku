@@ -8,6 +8,7 @@ export const SET_SUDOKU_SESSION = 'SET_SUDOKU_SESSION';
 export const SET_LEVEL = 'SET_LEVEL';
 export const INCREMENT_TIME = 'INCREMENT_TIME';
 export const CLEAR_BOARD = 'CLEAR_BOARD';
+export const SET_CELL = 'SET_CELL';
 
 export const setSudoku = data => ({
   type: SET_SUDOKU_SESSION,
@@ -22,8 +23,9 @@ export const setSudokuData = value => ({
   value,
 });
 
-export const onSolveSudoku = () => ({
+export const onSolveSudoku = board => ({
   type: ON_SOLVE_SUDOKU,
+  board,
 });
 
 export const solveSudoku = () => ({
@@ -49,4 +51,10 @@ export const incrementTime = () => ({
 
 export const clearBoard = () => ({
   type: CLEAR_BOARD,
+});
+
+export const setCell = (pos, value) => ({
+  type: SET_CELL,
+  pos,
+  value,
 });

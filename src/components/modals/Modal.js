@@ -7,15 +7,18 @@ import SettingsModal from './SettingsModal';
 import { getModalProps, getModalType } from '../../reducers/modal';
 import { hideModal } from '../../actions/modal';
 import HowToModal from './HowToModal';
+import CompletedModal from './CompletedModal';
 
-export const MODAL_TYPES = {
+export const ModalTypes = {
   SETTINGS: 0,
   HOW_TO_PLAY: 1,
+  COMPLETED_GAME: 2,
 };
 
-const MODAL_COMPONENTS = {
-  [MODAL_TYPES.SETTINGS]: SettingsModal,
-  [MODAL_TYPES.HOW_TO_PLAY]: HowToModal,
+const ModalComponents = {
+  [ModalTypes.SETTINGS]: SettingsModal,
+  [ModalTypes.HOW_TO_PLAY]: HowToModal,
+  [ModalTypes.COMPLETED_GAME]: CompletedModal,
 };
 
 const useStyles = makeStyles({
@@ -39,7 +42,7 @@ function ModalRoot(props) {
     return null;
   }
 
-  const SpecificModal = MODAL_COMPONENTS[modalType];
+  const SpecificModal = ModalComponents[modalType];
 
   return (
     <Modal

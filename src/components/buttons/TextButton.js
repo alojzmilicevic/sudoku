@@ -9,6 +9,10 @@ const useStyles = makeStyles(theme => ({
     color: props => (props.selected ? 'black' : theme.palette.secondary.dark),
     fontWeight: props => (props.selected ? 'bold' : '500'),
     textTransform: 'none',
+    borderBottom: props => (props.borderColor ? `1px solid ${props.borderColor}` : ''),
+    borderTop: props => (props.borderColor ? `1px solid ${props.borderColor}` : ''),
+    borderRadius: 0,
+    maxHeight: 49,
 
     '&:hover': {
       color: 'black',
@@ -17,8 +21,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const TextButton = ({ children, ...props }) => {
-  const classes = useStyles(props);
+const TextButton = ({
+  children, borderColor, selected, ...props
+}) => {
+  const classes = useStyles({ selected, borderColor });
   return (
     <MuiButton
       size="large"
@@ -34,6 +40,7 @@ const TextButton = ({ children, ...props }) => {
 TextButton.propTypes = {
   children: PropTypes.node,
   selected: PropTypes.bool,
+  borderColor: PropTypes.string,
 };
 
 export default TextButton;

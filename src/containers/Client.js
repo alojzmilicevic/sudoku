@@ -9,15 +9,11 @@ import Keyboard from '../components/keyboard/Keyboard';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { clearSelectedCells } from '../actions/selected';
-import AppState from '../constants/appStates';
-import Modal from '../components/CompletedPuzzleDialog';
-import { setAppState } from '../actions/client';
 import Options from '../components/Options';
 import TitleBar from '../components/TitleBar';
 import ModalRoot from '../components/modals/Modal';
 import Timer from '../components/Timer';
 import { getShowClock } from '../reducers/settings';
-import { getAppState } from '../reducers/client';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -57,10 +53,8 @@ const Client = (props) => {
   const classes = useStyles(dimensions);
   const size = getGridSize(dimensions.width, dimensions.height);
   const {
-    clearSelectedCells, appState, clearAppState, showTimer,
+    clearSelectedCells, showTimer,
   } = props;
-
-  const showCompletedDialog = appState === AppState.GAME_COMPLETED;
 
   const clearCells = (wrapperRef, e, clearSelectedCells, okRef) => {
     const shouldClear = (wrapperRef.current === e.target
@@ -98,29 +92,20 @@ const Client = (props) => {
       </div>
 
       <Footer />
-      {showCompletedDialog && (
-        <Modal
-          onClose={() => clearAppState()}
-        />
-      )}
     </div>
   );
 };
 
 Client.propTypes = {
   clearSelectedCells: PropTypes.func.isRequired,
-  clearAppState: PropTypes.func.isRequired,
-  appState: PropTypes.string.isRequired,
   showTimer: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   clearSelectedCells: () => dispatch(clearSelectedCells()),
-  clearAppState: () => dispatch(setAppState(AppState.READY_TO_PLAY)),
 });
 
 const mapStateToProps = state => ({
-  appState: getAppState(state),
   showTimer: getShowClock(state),
 });
 

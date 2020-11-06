@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import * as PropTypes from 'prop-types';
-import { getData } from '../reducers/sudoku';
+import { getCompleted, getData } from '../reducers/sudoku';
 import { toOneDimension } from '../utilities/util';
 import Cell from './Cell';
 import useKeyPressed from '../hooks/useKeyPressed';
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     width: props => props.size,
     height: props => props.size,
-    cursor: 'pointer',
+    cursor: props => (props.completed ? 'default' : 'pointer'),
     alignItems: 'center',
   },
 
@@ -58,6 +58,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   data: getData(state),
+  completed: getCompleted(state),
 });
 
 Sudoku.propTypes = {

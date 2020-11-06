@@ -7,13 +7,14 @@ import Tools from '../../constants/tools';
 import { setSudokuData } from '../../actions/sudoku';
 import { getCurrentTool } from '../../reducers/tools';
 import { Colors } from '../../constants/constants';
+import { getCompleted } from '../../reducers/sudoku';
 
 const useStyles = makeStyles({
   root: {
     minWidth: 115,
     minHeight: 115,
     backgroundColor: '#e6e6e6',
-    color: '#000',
+    color: props => (props.completed ? 'rgb(208 208 208)' : '#000'),
     border: '1px solid #959595',
     borderRadius: 3,
     marginTop: 14,
@@ -96,6 +97,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   currentTool: getCurrentTool(state),
+  completed: getCompleted(state),
 });
 
 

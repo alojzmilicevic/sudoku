@@ -12,6 +12,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   menuList: {
+    paddingTop: 0,
+    paddingBottom: 0,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
@@ -24,8 +26,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: 'transparent',
     textTransform: 'none',
     color: theme.palette.secondary.dark,
-    borderRight: props => (props.showBorder ? '1px solid #a2a2a2' : ''),
-    borderLeft: props => (props.showBorder ? '1px solid #a2a2a2' : ''),
+    borderRight: props => (props.showBorder ? '1px solid #a2a2a2' : '1px solid transparent'),
+    borderLeft: props => (props.showBorder ? '1px solid #a2a2a2' : '1px solid transparent'),
 
     '&:hover': {
       color: 'black',
@@ -76,7 +78,7 @@ const MenuBar = (props) => {
   };
 
   return (
-    <React.Fragment>
+    <div style={{ display: 'unset' }} onMouseLeave={() => setOpen(false)}>
       <Button
         ref={anchorRef}
         onClick={handleToggle}
@@ -115,7 +117,7 @@ const MenuBar = (props) => {
           </Grow>
         )}
       </Popper>
-    </React.Fragment>
+    </div>
   );
 };
 

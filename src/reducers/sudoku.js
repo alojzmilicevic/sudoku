@@ -1,19 +1,28 @@
-import { toPoint, toOneDimension } from '../utilities/util';
+import { toPoint } from '../utilities/util';
 import Tools from '../constants/tools';
 import { Colors } from '../constants/constants';
 import {
+  CLEAR_BOARD,
   CLEAR_CELL_DATA,
   INCREMENT_TIME,
   ON_SOLVE_SUDOKU,
+  SET_CELL,
   SET_LEVEL,
   SET_SUDOKU_DATA,
   SET_SUDOKU_SESSION,
-  CLEAR_BOARD, SOLVE_SUDOKU, SOLVE_CELL,
 } from '../actions/sudoku';
 import { SET_APP_STATE } from '../actions/client';
 import AppState from '../constants/appStates';
 import { Levels } from '../constants/levels';
 import { solveSudoku } from '../libs/sudokuSolver';
+
+const defaultState = {
+  selected: [],
+  totalSelected: 0,
+  lastSelected: 0,
+  defaultTool: Tools.NUMBER,
+  currentTool: Tools.NUMBER,
+};
 
 function transformData(board) {
   let cellsLeft = 0;
@@ -34,6 +43,7 @@ function transformData(board) {
 
       if (number !== 0) {
         cell.preFilled = true;
+        cell.color = '#e6e6e6';
       } else {
         cellsLeft++;
       }
@@ -42,7 +52,7 @@ function transformData(board) {
   });
 
   return {
-    cellsLeft, data, time: 0, // Some redux weirdness doesn't allow setting time in initial state
+    cellsLeft, data, time: 0, completed: false, // Some redux weirdness doesn't allow setting time in initial state
   };
 }
 
@@ -51,11 +61,20 @@ export default function sudoku(state = null, action) {
   switch (action.type) {
     case SET_APP_STATE: {
       const { appState } = action;
-      const { completed } = state;
-
+      const { boards, level } = state;
+      const { completed } = boards[level];
       const newCompleted = appState === AppState.GAME_COMPLETED ? true : completed;
 
-      return { ...state, completed: newCompleted };
+      return {
+        ...state,
+        boards: {
+          ...boards,
+          [level]: {
+            ...boards[level],
+            completed: newCompleted,
+          },
+        },
+      };
     }
     case SET_SUDOKU_SESSION: {
       const {
@@ -91,7 +110,11 @@ export default function sudoku(state = null, action) {
         boards, level, selected,
       } = state;
 
-      const { cellsLeft, data } = boards[level];
+      const { cellsLeft, data, completed } = boards[level];
+
+      if (completed) {
+        return state;
+      }
 
       let newCellsLeft = cellsLeft;
 
@@ -121,13 +144,16 @@ export default function sudoku(state = null, action) {
       const {
         boards, level, selected, currentTool, totalSelected,
       } = state;
-      const { value } = action;
-      const { cellsLeft, data } = boards[level];
-
-      let newCellsLeft = cellsLeft;
+      const { cellsLeft, data, completed } = boards[level];
 
       // Just return state if there are no selected cells, since nothing can changed if that's the case
-      if (totalSelected === 0) return state;
+      if (completed || totalSelected === 0) {
+        return state;
+      }
+      const { value } = action;
+      const numberValue = parseInt(value, 10);
+
+      let newCellsLeft = cellsLeft;
 
       selected.forEach((val, i) => {
         const { x, y } = toPoint(i);
@@ -140,19 +166,20 @@ export default function sudoku(state = null, action) {
               if (curCell.value === 0) {
                 newCellsLeft--;
               }
-              if (curCell.value !== 0 && value === 0) {
+              if (curCell.value !== 0 && numberValue === 0) {
                 newCellsLeft++;
               }
-              curCell.value = value;
+              // in case numpad is used we need to cast to int
+              curCell.value = numberValue;
             }
             break;
           case Tools.COLOR:
-            curCell.color = Colors[value - 1];
+            curCell.color = Colors[numberValue - 1];
             break;
           case Tools.NOTE: {
             const { notes } = curCell;
-            if (!notes.includes(value)) {
-              notes.push(value);
+            if (!notes.includes(numberValue)) {
+              notes.push(numberValue);
               notes.sort();
             }
             break;
@@ -161,36 +188,6 @@ export default function sudoku(state = null, action) {
             break;
         }
       });
-      boards[level].cellsLeft = newCellsLeft;
-
-      return { ...state, ...boards };
-    }
-
-    case SET_LEVEL: {
-      return { ...state, level: action.level };
-    }
-
-    case SOLVE_SUDOKU: {
-      const { boards, level, solutions } = state;
-
-      boards[level] = transformData(solutions[level]);
-
-      return {
-        ...state,
-        completed: true,
-        appState: AppState.GAME_COMPLETED,
-      };
-    }
-    case SOLVE_CELL: {
-      const {
-        boards, level, lastSelected, solutions,
-      } = state;
-
-      const currentSolution = solutions[level];
-
-      const { x, y } = toPoint(lastSelected);
-      const curData = [...boards[level].data];
-      curData[y][x].value = currentSolution[y][x];
 
       return {
         ...state,
@@ -198,13 +195,65 @@ export default function sudoku(state = null, action) {
           ...boards,
           [level]: {
             ...boards[level],
-            data: [...curData],
+            cellsLeft: newCellsLeft,
           },
         },
       };
     }
+    case SET_CELL: {
+      const { pos, value } = action;
+      const { boards, level } = state;
+
+      const { x, y } = pos;
+      const nextBoard = { ...boards };
+      const curBoard = nextBoard[level];
+      const cell = curBoard.data[y][x];
+      if (cell.value === 0) {
+        curBoard.cellsLeft--;
+      }
+
+      cell.preFilled = true;
+      cell.color = '#e6e6e6';
+      cell.value = value;
+
+      return { ...state, boards: nextBoard };
+    }
+    case SET_LEVEL: {
+      return { ...state, level: action.level };
+    }
     case ON_SOLVE_SUDOKU: {
-      return { ...state, completed: true };
+      const { boards, level } = state;
+
+      const { board } = action;
+
+      if (board) {
+        return {
+          ...state,
+          ...defaultState,
+          boards: {
+            ...boards,
+            [level]: {
+              ...boards[level],
+              data: board,
+              completed: true,
+              cellsLeft: 0,
+            },
+          },
+        };
+      }
+
+      return {
+        ...state,
+        ...defaultState,
+        boards: {
+          ...boards,
+          [level]: {
+            ...boards[level],
+            completed: true,
+            cellsLeft: 0,
+          },
+        },
+      };
     }
     case INCREMENT_TIME: {
       const { boards, level } = state;
@@ -241,5 +290,36 @@ export const getData = state => getCurrentBoard(state).data;
 export const getCellsLeft = state => getCurrentBoard(state).cellsLeft;
 export const getCellData = (state, pos) => getCurrentBoard(state).data[pos[0]][pos[1]];
 export const getTimer = state => getCurrentBoard(state).time;
+export const getCompleted = state => getCurrentBoard(state).completed;
+export const getSolution = (state) => {
+  const { solutions, level } = state;
 
+  return solutions[level];
+};
+export const getCompletedBoards = (state) => {
+  const { boards } = state;
+
+  const boardData = {};
+
+  Object.keys(boards).forEach((board) => {
+    boardData[board] = boards[board].completed;
+  });
+
+  return boardData;
+};
 export const isComplete = state => getCurrentBoard(state).completed;
+export const isFailed = (state) => {
+  const { completed, cellsLeft } = getCurrentBoard(state);
+
+  return cellsLeft === 0 && completed === false;
+};
+
+export const getCorrectValueForCell = (state, pos) => {
+  const { solutions, level } = state;
+
+  return solutions[level][pos.y][pos.x];
+};
+
+export const getCell = (state, pos) => getData(state)[pos.y][pos.x];
+export const getCellValue = (state, pos) => getCell(state, pos).value;
+export const isCellEmpty = (state, pos) => getCellValue(state, pos) === 0;

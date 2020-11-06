@@ -123,6 +123,7 @@ const Cell = (props) => {
     value, color, notes, preFilled,
   } = cellData(pos);
   const [down, setDown] = useState(false);
+  const selected = isSelected(id);
 
   const downHandler = useCallback(() => {
     setDown(true);
@@ -136,12 +137,11 @@ const Cell = (props) => {
   useEventListener('mouseup', upHandler);
 
   const mouseMove = () => {
-    if (down) {
+    if (down && !selected) {
       addToSelectedCells(id);
     }
   };
   const classes = useStyles(props);
-  const selected = isSelected(id);
 
   const className = getClassName(pos, id, selected, !preFilled, classes);
   const useValue = isNotZero(value);

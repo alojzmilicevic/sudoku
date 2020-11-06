@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     width: '90%',
     minHeight: 40,
     marginTop: theme.spacing(1),
-    color: 'black',
+    color: 'rgba(0,0,0,0.2)',
     border: '1px solid #a6a6a6',
     '&:hover': {
       border: '1px solid #333',
@@ -29,13 +29,13 @@ const Button = (props) => {
   const classes = useStyles(props);
 
   const {
-    onClick, text, className, selected,
+    onClick, text, className, selected, ...other
   } = props;
 
   const fullClassName = clsx(classes.button, className && className, selected && classes.selected);
 
   return (
-    <MuiButton disableRipple onClick={() => onClick()} className={fullClassName} variant="outlined" color="primary">
+    <MuiButton {...other} disableRipple onClick={() => onClick()} className={fullClassName} variant="outlined" color="primary">
       {text}
     </MuiButton>
   );
