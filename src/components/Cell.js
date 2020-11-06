@@ -118,10 +118,10 @@ const Cell = (props) => {
     pos, addToSelectedCells, id, isSelected, clearSelectedCells, cellData,
   } = props;
 
-  // eslint-disable-next-line no-unused-vars
   const {
     value, color, notes, preFilled,
   } = cellData(pos);
+
   const [down, setDown] = useState(false);
   const selected = isSelected(id);
 

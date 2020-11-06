@@ -24,6 +24,11 @@ const defaultState = {
   currentTool: Tools.NUMBER,
 };
 
+const cellColors = {
+  color: '#fff',
+  preFilledColor: '#e6e6e6',
+};
+
 function transformData(board) {
   let cellsLeft = 0;
   const data = [];
@@ -36,14 +41,15 @@ function transformData(board) {
       const number = row[col];
       const cell = {
         value: number,
-        color: '#fff',
+        color: cellColors.color,
         notes: [],
         preFilled: false,
       };
 
+      // If this is a prefilled cell
       if (number !== 0) {
         cell.preFilled = true;
-        cell.color = '#e6e6e6';
+        cell.color = cellColors.preFilledColor;
       } else {
         cellsLeft++;
       }
@@ -129,10 +135,10 @@ export default function sudoku(state = null, action) {
           } else if (curCell.notes.length > 0) {
             curCell.notes = [];
           } else {
-            curCell.color = '#fff';
+            curCell.color = cellColors.color;
           }
         } else {
-          curCell.color = '#fff';
+          curCell.color = cellColors.preFilledColor;
         }
       });
 
@@ -213,7 +219,7 @@ export default function sudoku(state = null, action) {
       }
 
       cell.preFilled = true;
-      cell.color = '#e6e6e6';
+      cell.color = cellColors.preFilledColor;
       cell.value = value;
 
       return { ...state, boards: nextBoard };
