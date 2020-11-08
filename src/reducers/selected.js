@@ -11,22 +11,19 @@ export default function selected(state = null, action) {
       } = state;
       const { completed } = boards[level];
 
-      if (completed) {
+      if (completed || selected[id]) {
         return state;
       }
 
       const newSelected = selected.slice();
       newSelected[id] = true;
 
-      if (selected[id] !== true) {
-        return {
-          ...state,
-          selected: newSelected,
-          lastSelected: id,
-          totalSelected: totalSelected + 1,
-        };
-      }
-      return state;
+      return {
+        ...state,
+        selected: newSelected,
+        lastSelected: id,
+        totalSelected: totalSelected + 1,
+      };
     }
     case CHANGE_LAST_SELECTED: {
       const { boards, level } = state;
@@ -59,6 +56,10 @@ export default function selected(state = null, action) {
       return { ...state, selected: newSelected, totalSelected: 1 };
     }
     case CLEAR_SELECTED: {
+      const { totalSelected } = state;
+      if (totalSelected === 0) {
+        return state;
+      }
       return {
         ...state, selected: [], lastSelected: 0, totalSelected: 0,
       };
