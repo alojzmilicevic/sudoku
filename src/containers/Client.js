@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     width: props => props.width,
     height: props => props.height,
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.primary.frontColor,
     top: 0,
     left: 0,
     right: 0,
@@ -32,10 +32,11 @@ const useStyles = makeStyles(theme => ({
 
   contentWrapper: {
     display: 'flex',
-    backgroundColor: '#fff',
     flex: '1 0 auto',
     flexDirection: 'column',
     alignItems: 'center',
+    marginTop: 30,
+    marginBottom: 30,
   },
 
   main: {
@@ -44,7 +45,17 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
-    flexWrap: 'wrap',
+  },
+
+  '@media (max-width: 1200px)': {
+    main: {
+      flexDirection: 'column',
+    },
+
+    contentWrapper: {
+      marginTop: 0,
+      marginBottom: 0,
+    },
   },
 }));
 
@@ -67,9 +78,10 @@ const Client = (props) => {
   };
 
   const showTimerInMainWindow = dimensions.width <= 1000;
+  const showHeader = dimensions.width > 750;
 
-  const wrapperRef = createRef();
   const okRef = createRef();
+  const wrapperRef = createRef();
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
@@ -77,8 +89,13 @@ const Client = (props) => {
       className={classes.container}
     >
       <ModalRoot />
-      <Header />
-      <TitleBar />
+      {showHeader && (
+        <React.Fragment>
+          <Header />
+          <TitleBar />
+        </React.Fragment>
+      )
+      }
       <Options ref={okRef} />
       <div className={classes.contentWrapper}>
         {showTimerInMainWindow && showTimer && <Timer />}
@@ -87,7 +104,7 @@ const Client = (props) => {
           ref={wrapperRef}
         >
           <Sudoku size={size} />
-          <Keyboard size={size} />
+          <Keyboard width={dimensions.width} size={size} />
         </div>
       </div>
 

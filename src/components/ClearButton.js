@@ -6,19 +6,19 @@ import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { clearCellData } from '../actions/sudoku';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   deleteButton: {
-    backgroundColor: '#e6e6e6',
+    backgroundColor: theme.keyboardColors.background,
     marginTop: 14,
     minHeight: 48,
-    border: '1px solid #959595',
+    border: `1px solid ${theme.keyboardColors.borderColor}`,
     borderRadius: 3,
-    color: 'black',
+    color: theme.keyboardColors.textColor,
     width: '100%',
-    flex: 1,
+    fontSize: '2em',
 
     '&:hover': {
-      backgroundColor: '#e6e6e6',
+      backgroundColor: theme.keyboardColors.background,
     },
   },
 
@@ -26,9 +26,10 @@ const useStyles = makeStyles({
     deleteButton: {
       width: 'calc(100% / 5 - 2%)',
       minHeight: 0,
+      fontSize: '1em',
     },
   },
-});
+}));
 
 const ClearButton = (props) => {
   const { clearCellData } = props;
@@ -37,7 +38,7 @@ const ClearButton = (props) => {
 
   return (
     <Button disableTouchRipple onClick={() => clearCellData()} className={classes.deleteButton}>
-      <ClearIcon style={{ height: '2em' }} />
+      <ClearIcon />
     </Button>
   );
 };

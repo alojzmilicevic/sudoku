@@ -7,21 +7,10 @@ const useStyles = makeStyles(theme => ({
     borderTop: '1px solid #a2a2a2',
     borderBottom: '1px solid #a2a2a2',
     position: 'relative',
-    display: 'flex',
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
-    color: '#333',
+    color: theme.palette.primary.main,
     alignItems: 'flex-end',
-  },
-
-  row: {
-    maxWidth: 1280,
-    flex: '1 1 auto',
-    padding: 0,
-    border: 0,
-    verticalAlign: 'baseline',
-    fontSize: '100%',
-    margin: '0 auto',
   },
 
   text: {
@@ -34,16 +23,14 @@ const useStyles = makeStyles(theme => ({
 
   bigText: {
     fontStyle: 'normal',
-    fontSize: 56,
+    fontSize: '3em',
     fontWeight: 'bold',
-    marginRight: 16,
-    marginLeft: 16,
     padding: '8px 14px',
   },
 
   smallText: {
     display: 'inline-block',
-    fontSize: 28,
+    fontSize: '1.5em',
     fontWeight: 300,
   },
 }));
@@ -55,7 +42,7 @@ const TitleBar = (props) => {
 
   return (
     <div className={classes.titleBar}>
-      <div className={classes.row}>
+      <div className="row">
         <h2 className={classes.text}>
           <em className={classes.bigText}>
             Sudoku
@@ -68,7 +55,5 @@ const TitleBar = (props) => {
     </div>
   );
 };
-
-TitleBar.propTypes = {};
 
 export default TitleBar;

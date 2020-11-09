@@ -15,6 +15,7 @@ import { SET_APP_STATE } from '../actions/client';
 import AppState from '../constants/appStates';
 import { Levels } from '../constants/levels';
 import { solveSudoku } from '../libs/sudokuSolver';
+import { cellColors } from '../theme/theme';
 
 const defaultState = {
   selected: [],
@@ -22,11 +23,6 @@ const defaultState = {
   lastSelected: 0,
   defaultTool: Tools.NUMBER,
   currentTool: Tools.NUMBER,
-};
-
-const cellColors = {
-  color: '#fff',
-  preFilledColor: '#e6e6e6',
 };
 
 function transformData(board) {
@@ -41,7 +37,7 @@ function transformData(board) {
       const number = row[col];
       const cell = {
         value: number,
-        color: cellColors.color,
+        color: cellColors.background,
         notes: [],
         preFilled: false,
       };
@@ -49,7 +45,7 @@ function transformData(board) {
       // If this is a prefilled cell
       if (number !== 0) {
         cell.preFilled = true;
-        cell.color = cellColors.preFilledColor;
+        cell.color = cellColors.preFilledBackground;
       } else {
         cellsLeft++;
       }
@@ -135,10 +131,10 @@ export default function sudoku(state = null, action) {
           } else if (curCell.notes.length > 0) {
             curCell.notes = [];
           } else {
-            curCell.color = cellColors.color;
+            curCell.color = cellColors.background;
           }
         } else {
-          curCell.color = cellColors.preFilledColor;
+          curCell.color = cellColors.preFilledBackground;
         }
       });
 
@@ -219,7 +215,7 @@ export default function sudoku(state = null, action) {
       }
 
       cell.preFilled = true;
-      cell.color = cellColors.preFilledColor;
+      cell.color = cellColors.preFilledBackground;
       cell.value = value;
 
       return { ...state, boards: nextBoard };

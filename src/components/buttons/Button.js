@@ -9,18 +9,19 @@ const useStyles = makeStyles(theme => ({
     width: '90%',
     minHeight: 40,
     marginTop: theme.spacing(1),
-    color: 'rgba(0,0,0,0.2)',
-    border: '1px solid #a6a6a6',
+    color: theme.palette.primary.lightFadeColor,
+    border: `1px solid ${theme.palette.primary.fadeColor}`,
     '&:hover': {
-      border: '1px solid #333',
+      border: `1px solid ${theme.palette.primary.darkColor}`,
     },
+    textTransform: 'none',
   },
 
   selected: {
-    backgroundColor: '#333',
-    color: 'white',
+    backgroundColor: theme.palette.primary.darkColor,
+    color: theme.palette.primary.frontColor,
     '&:hover': {
-      backgroundColor: '#333',
+      backgroundColor: theme.palette.primary.darkColor,
     },
   },
 }));

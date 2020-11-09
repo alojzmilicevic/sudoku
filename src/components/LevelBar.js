@@ -13,10 +13,6 @@ import { setLevel } from '../actions/sudoku';
 import MenuBar from './MenuBar';
 
 const useStyles = makeStyles(theme => ({
-  leftButton: {
-    marginLeft: 10,
-  },
-
   menuButton: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -51,9 +47,9 @@ const LevelBar = ({ level, setLevel }) => {
   return (
     <React.Fragment>
       <Collapse in={largeScreen} timeout="auto" unmountOnExit>
-        <div style={{ marginLeft: 16 }}>
+        <React.Fragment>
           {buttons}
-        </div>
+        </React.Fragment>
       </Collapse>
       {!largeScreen && (
       <MenuBar

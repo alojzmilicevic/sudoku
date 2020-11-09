@@ -4,45 +4,33 @@ import { connect } from 'react-redux';
 import * as PropTypes from 'prop-types';
 import ToolCell from './ToolCell';
 import Tools from '../../constants/tools';
-import ClearButton from '../ClearButton';
 import Button from '../buttons/Button';
 import { setDefaultTool } from '../../actions/tools';
 import { getCurrentTool } from '../../reducers/tools';
+import ClearButton from "../ClearButton";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 360,
+    maxWidth: 240,
     width: '100%',
     marginLeft: 60,
     display: 'flex',
     flexDirection: 'column',
-    alignContent: 'space-around',
   },
 
   control: {
-    width: '100%',
     display: 'flex',
-    justifyContent: 'space-evenly',
-  },
-
-  keyboardContainer: {
-    display: 'flex',
-    alignContent: 'space-between',
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-    width: '100%',
   },
 
   keyboard: {
     display: 'flex',
-    flexDirection: 'row',
     flexWrap: 'wrap',
-    width: '100%',
+    justifyContent: 'space-between',
   },
 
   '@media (max-width: 1200px)': {
     root: {
-      maxWidth: 720,
+      maxWidth: 380,
       marginLeft: 0,
       padding: 10,
     },
@@ -73,9 +61,7 @@ const Keyboard = (props) => {
         <Button onClick={() => setNotesTool()} text="Note" selected={currentTool === Tools.NOTE} />
         <Button onClick={() => setColorTool()} text="Color" selected={currentTool === Tools.COLOR} />
       </div>
-      <div className={classes.keyboardContainer}>
-        <Grid />
-      </div>
+      <Grid />
     </div>
   );
 };

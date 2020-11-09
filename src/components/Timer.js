@@ -20,7 +20,7 @@ function duration(time) {
   return '00:00';
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   timerContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -29,28 +29,25 @@ const useStyles = makeStyles({
   },
 
   timer: {
-    fontSize: '1.5em',
-  },
-
-  icon: {
-    width: 30,
-    height: 30,
+    fontSize: '1.2em',
   },
 
   button: {
-    color: props => (props.completed ? 'transparent' : '#575757'),
+    color: props => (props.completed ? 'transparent' : theme.palette.primary.fadeColor),
+    minWidth: 0,
+    padding: '5px 5px',
 
     '&:hover': {
       cursor: props => (props.completed ? 'default' : 'pointer'),
-      color: props => (props.completed ? 'transparent' : '#333'),
+      color: props => (props.completed ? 'transparent' : theme.palette.primary.darkColor),
       backgroundColor: 'transparent',
     },
   },
-});
+}));
 
 const IconButton = React.memo(({ classes, active, setActive }) => (
   <Button disableTouchRipple onClick={() => setActive(!active)} className={classes.button}>
-    { active ? <PauseIcon className={classes.icon} /> : <PlayArrowIcon className={classes.icon} /> }
+    {active ? <PauseIcon className={classes.timer} /> : <PlayArrowIcon className={classes.timer} />}
   </Button>
 ));
 
@@ -60,7 +57,7 @@ IconButton.propTypes = {
   setActive: PropTypes.func.isRequired,
 };
 
-const Timer = (props) => {
+const Timer = React.memo((props) => {
   const [active, setActive] = useState(true);
   const { time, setTime, completed } = props;
   const classes = useStyles(props);
@@ -85,7 +82,7 @@ const Timer = (props) => {
       <IconButton setActive={setActive} classes={classes} active={active} />
     </div>
   );
-};
+});
 
 const mapStateToProps = state => ({
   time: getTimer(state),

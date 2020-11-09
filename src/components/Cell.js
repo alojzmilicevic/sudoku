@@ -9,7 +9,7 @@ import { isCellSelected } from '../reducers/selected';
 import { addToSelectedCells, clearSelectedCells } from '../actions/selected';
 import useEventListener from '../hooks/useEventListener';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   notesContainer: {
     position: 'relative',
     width: '100%',
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     height: props => (props.height / 9) - 2,
     width: props => (props.height / 9) - 2,
     opacity: 0.8,
-    backgroundColor: 'rgb(205,230,252)',
+    backgroundColor: theme.cellColors.selected,
   },
 
   cellNote: {
@@ -35,67 +35,49 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 20,
+    fontSize: '45%',
   },
 
   td: {
-    border: 'solid thin #11101063',
+    border: `solid thin ${theme.cellColors.thinBorder}`,
     flex: '1 1 0',
     height: props => props.height / 9,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     boxSizing: 'border-box',
-    fontSize: 50,
+    fontSize: '3.5em',
     fontWeight: 100,
-    color: '#616060',
+    color: theme.cellColors.preFilledTextColor,
   },
 
   mutable: {
-    color: '#508be3',
+    color: theme.cellColors.textColor,
     fontWeight: 400,
   },
 
   bottomBorder: {
-    borderBottom: '2px solid black',
+    borderBottom: `2px solid ${theme.palette.primary.darkColor}`,
   },
 
   rightBorder: {
-    borderRight: '2px solid black',
+    borderRight: `2px solid ${theme.palette.primary.darkColor}`,
   },
 
   leftBorder: {
-    borderLeft: '2px solid black',
+    borderLeft: `2px solid ${theme.palette.primary.darkColor}`,
   },
 
   topBorder: {
-    borderTop: '2px solid black',
+    borderTop: `2px solid ${theme.palette.primary.darkColor}`,
   },
 
-  '@media (max-width: 650px)': {
+  '@media (max-width: 750px)': {
     td: {
-      fontSize: '40px',
+      fontSize: '2em',
     },
   },
-
-  '@media (max-width: 560px)': {
-    td: {
-      fontSize: '30px',
-    },
-  },
-
-  '@media (max-width: 470px)': {
-    td: {
-      fontSize: '20px',
-    },
-  },
-
-  '@media (max-width: 380px)': {
-    td: {
-      fontSize: '15px',
-    },
-  },
-});
+}));
 
 const getClassName = (pos, id, selected, mutable, classes) => {
   const [y, x] = pos;
@@ -134,7 +116,9 @@ const Cell = (props) => {
   }, [setDown]);
 
   useEventListener('mousedown', downHandler);
+  useEventListener('touchstart', downHandler);
   useEventListener('mouseup', upHandler);
+  useEventListener('touchend', upHandler);
 
   const mouseMove = () => {
     if (down && !selected) {
@@ -166,6 +150,7 @@ const Cell = (props) => {
         clearSelectedCells();
         addToSelectedCells(id);
       }}
+
       className={className}
       role="button"
     >

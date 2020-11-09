@@ -10,7 +10,7 @@ import * as PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
   icon: {
-    color: theme.palette.primary.thirdColor,
+    color: theme.palette.primary.offsetColor,
   },
 }));
 

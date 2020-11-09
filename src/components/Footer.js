@@ -7,18 +7,16 @@ import {
 
 const useStyles = makeStyles(theme => ({
   footerWrapper: {
-    position: 'relative',
     display: 'flex',
     justifyContent: 'center',
     backgroundColor: theme.palette.primary.main,
     flexWrap: 'wrap',
     userSelect: 'text',
-    color: '#d9d8d8',
+    color: theme.palette.primary.frontColor,
   },
 
   footer: {
-    display: 'flex',
-    position: 'relative',
+    backgroundColor: theme.palette.primary.main,
     padding: theme.spacing(6),
   },
 
@@ -41,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   faded: {
-    color: '#878686',
+    color: theme.palette.primary.fadeColor,
     fontFamily: 'monospace',
     fontSize: 13,
     width: '100%',
@@ -49,6 +47,16 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.palette.primary.secondary,
+  },
+
+  '@media (max-width: 750px)': {
+    faded: {
+      flexDirection: 'column',
+    },
+
+    links: {
+      marginRight: 0,
+    },
   },
 }));
 
@@ -74,13 +82,15 @@ const Footer = () => {
       </div>
       <div className={classes.faded}>
         <div className={classes.links}>
-          {`© ${year} Yasc. Media Productions | Privacy Policy | Site Map | Doo.com`}
+          {`© ${year} Yasc. productions | Privacy Policy`}
         </div>
-        <GitIcon />
-        <FacebookIcon />
-        <InstagramIcon />
-        <YouTubeIcon />
-        <PintrestIcon />
+        <div>
+          <GitIcon />
+          <FacebookIcon />
+          <InstagramIcon />
+          <YouTubeIcon />
+          <PintrestIcon />
+        </div>
       </div>
     </div>
   );

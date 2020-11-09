@@ -20,17 +20,19 @@ const useStyles = makeStyles(theme => ({
   },
 
   textButton: {
-    marginLeft: 16,
+    fontSize: '1.2em',
     borderRadius: 0,
     padding: '8px 14px',
     backgroundColor: 'transparent',
     textTransform: 'none',
-    color: theme.palette.secondary.dark,
-    borderRight: props => (props.showBorder ? '1px solid #a2a2a2' : '1px solid transparent'),
-    borderLeft: props => (props.showBorder ? '1px solid #a2a2a2' : '1px solid transparent'),
+    color: theme.additionalPalette.textButton.lightMode.main,
+    borderRight: props => (props.showBorder ? `1px solid ${theme.palette.primary.fadeColor}`
+      : '1px solid transparent'),
+    borderLeft: props => (props.showBorder ? `1px solid ${theme.palette.primary.fadeColor}`
+      : '1px solid transparent'),
 
     '&:hover': {
-      color: 'black',
+      color: theme.additionalPalette.textButton.lightMode.main,
       backgroundColor: 'transparent',
     },
   },
@@ -48,12 +50,12 @@ const useStyles = makeStyles(theme => ({
   },
 
   popper: {
-    borderBottom: '1px solid #a2a2a2a2',
-    borderRight: '1px solid #a2a2a2a2',
-    borderLeft: '1px solid #a2a2a2a2',
+    borderBottom: `1px solid ${theme.palette.primary.fadeColor}`,
+    borderRight: `1px solid ${theme.palette.primary.fadeColor}`,
+    borderLeft: `1px solid ${theme.palette.primary.fadeColor}`,
     borderRadius: 0,
     marginLeft: -1,
-    marginTop: 2,
+    marginTop: 5,
   },
 }));
 
@@ -83,7 +85,6 @@ const MenuBar = (props) => {
         ref={anchorRef}
         onClick={handleToggle}
         className={classes.textButton}
-        name="b"
       >
         {buttonText}
         <ArrowDropDownIcon className={clsx(classes.expand, {

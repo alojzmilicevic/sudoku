@@ -2,6 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import MuiSettingsIcon from '@material-ui/icons/Settings';
+import { IconButton } from '@material-ui/core';
 import Timer from './Timer';
 import { showModal } from '../actions/modal';
 import { ModalTypes } from './modals/Modal';
@@ -15,24 +17,22 @@ import {
 } from '../actions/sudoku';
 import MenuBar from './MenuBar';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   options: {
     borderBottom: '1px solid #a2a2a2',
     position: 'relative',
-    display: 'flex',
     alignItems: 'center',
-  },
-  row: {
-    maxWidth: 1280,
-    margin: '0 auto',
-    flex: '1 1 auto',
   },
 
   optionsRow: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    fontSize: '1.1rem',
+  },
+
+  icon: {
+    fontSize: '1em',
+    color: theme.palette.primary.main,
   },
 }));
 
@@ -44,20 +44,21 @@ const Options = React.forwardRef((props, ref) => {
   const { width } = useWindowSize();
 
   const showTimerInOptions = width > 1000;
+  const showSettingsIcon = width < 750;
 
   const buttonData = [
     { text: strings.optionsBar.solveCell, onClick: solveCell },
     { text: strings.optionsBar.solvePuzzle, onClick: solvePuzzle },
-    { text: strings.optionsBar.reset, onClick: clearBoard, color: '#a2a2a2' },
+    { text: strings.optionsBar.reset, onClick: clearBoard, showBorder: true },
     { text: strings.optionsBar.howToPlay, onClick: openHowToPlay },
   ];
 
   const buttons = buttonData.map((data, index) => {
-    if (data.color) {
+    if (data.showBorder) {
       return (
         <TextButton
           style={{ width: '100%' }}
-          borderColor={data.color}
+          showBorder
           key={`help${index}`}
           onClick={data.onClick}
         >
@@ -72,15 +73,24 @@ const Options = React.forwardRef((props, ref) => {
     );
   });
 
+  const SettingsIcon = () => (
+    <IconButton onClick={openSettings}>
+      <MuiSettingsIcon className={classes.icon} />
+    </IconButton>
+  );
+
   return (
     <div ref={ref} className={classes.options}>
-      <div className={classes.row}>
+      <div className="row">
         <div className={classes.optionsRow}>
           <DifficultyOption />
           {showTimerInOptions && showTimer && <Timer />}
           <div>
             <MenuBar placement="bottom-end" buttonText={strings.optionsBar.help} buttons={buttons} showBorder />
-            <TextButton onClick={openSettings}>{strings.optionsBar.settings}</TextButton>
+            {
+              showSettingsIcon ? <SettingsIcon />
+                : <TextButton onClick={openSettings}>{strings.optionsBar.settings}</TextButton>
+            }
           </div>
         </div>
       </div>

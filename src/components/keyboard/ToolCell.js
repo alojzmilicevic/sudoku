@@ -4,27 +4,27 @@ import * as PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import Tools from '../../constants/tools';
-import { setSudokuData } from '../../actions/sudoku';
+import { clearCellData, setSudokuData } from '../../actions/sudoku';
 import { getCurrentTool } from '../../reducers/tools';
 import { Colors } from '../../constants/constants';
 import { getCompleted } from '../../reducers/sudoku';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
-    minWidth: 115,
-    minHeight: 115,
-    backgroundColor: '#e6e6e6',
-    color: props => (props.completed ? 'rgb(208 208 208)' : '#000'),
-    border: '1px solid #959595',
+    minWidth: 70,
+    minHeight: 70,
+    backgroundColor: theme.keyboardColors.background,
+    color: props => (props.completed ? theme.keyboardColors.notSelectableColor
+      : theme.keyboardColors.textColor),
+    border: `1px solid ${theme.keyboardColors.borderColor}`,
     borderRadius: 3,
     marginTop: 14,
     cursor: 'pointer',
-    fontSize: '4em',
+    fontSize: '2em',
     fontWeight: 100,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
   },
 
   colorStyle: {
@@ -44,21 +44,31 @@ const useStyles = makeStyles({
   '@media (max-width: 1200px)': {
     root: {
       width: 'calc(100% / 5 - 2%)',
-      fontSize: '2em',
-      minHeight: 62,
+      fontSize: '1.3em',
+      minHeight: 45,
+      minWidth: 0,
     },
 
     noteStyle: {
-      fontSize: '1.3em',
+      fontSize: '1.1em',
       justifyContent: 'initial',
       alignItems: 'initial',
     },
+
+    text: {
+      margin: 5,
+    },
   },
-});
+}));
 
 const ToolCell = (props) => {
-  const { value, currentTool, setSudokuData } = props;
+  const {
+    value, currentTool, setSudokuData, clearCellData, ...other
+  } = props;
   const classes = useStyles(props);
+
+  const onClick = value === 'x' ? () => clearCellData(value)
+    : () => setSudokuData(value);
 
   let className = '';
   switch (currentTool) {
@@ -77,7 +87,7 @@ const ToolCell = (props) => {
 
   return (
     // eslint-disable-next-line jsx-a11y/interactive-supports-focus
-    <div role="button" onClick={() => setSudokuData(value)} className={className}>
+    <div {...other} role="button" onClick={onClick} className={className}>
       <span className={classes.text}>
         {currentTool !== Tools.COLOR && value}
       </span>
@@ -89,10 +99,12 @@ ToolCell.propTypes = {
   value: PropTypes.number.isRequired,
   currentTool: PropTypes.number.isRequired,
   setSudokuData: PropTypes.func.isRequired,
+  clearCellData: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   setSudokuData: value => dispatch(setSudokuData(value)),
+  clearCellData: () => dispatch(clearCellData()),
 });
 
 const mapStateToProps = state => ({
