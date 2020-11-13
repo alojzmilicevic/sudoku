@@ -4,12 +4,12 @@ import { getDateInfo } from '../utilities/util';
 
 const useStyles = makeStyles(theme => ({
   titleBar: {
-    borderTop: '1px solid #a2a2a2',
-    borderBottom: '1px solid #a2a2a2',
+    borderTop: `1px solid ${theme.palette.primary.fadeColor}`,
+    borderBottom: `1px solid ${theme.palette.primary.fadeColor}`,
     position: 'relative',
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.textColor,
     alignItems: 'flex-end',
   },
 

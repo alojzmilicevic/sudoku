@@ -25,14 +25,14 @@ const useStyles = makeStyles(theme => ({
     padding: '8px 14px',
     backgroundColor: 'transparent',
     textTransform: 'none',
-    color: theme.additionalPalette.textButton.lightMode.main,
+    color: theme.palette.primary.textColor,
     borderRight: props => (props.showBorder ? `1px solid ${theme.palette.primary.fadeColor}`
       : '1px solid transparent'),
     borderLeft: props => (props.showBorder ? `1px solid ${theme.palette.primary.fadeColor}`
       : '1px solid transparent'),
 
     '&:hover': {
-      color: theme.additionalPalette.textButton.lightMode.main,
+      color: theme.palette.primary.darkColor,
       backgroundColor: 'transparent',
     },
   },

@@ -15,7 +15,7 @@ import { SET_APP_STATE } from '../actions/client';
 import AppState from '../constants/appStates';
 import { Levels } from '../constants/levels';
 import { solveSudoku } from '../libs/sudokuSolver';
-import { cellColors } from '../theme/theme';
+import { getCurMode } from '../theme/theme';
 
 const defaultState = {
   selected: [],
@@ -29,6 +29,7 @@ function transformData(board) {
   let cellsLeft = 0;
   const data = [];
 
+  const { cellColors } = getCurMode();
   // Set the initial numbers index (0-80)
   // so that they can't be changed later on when updating cells.
   Object.entries(board).forEach(([rowNumber, row]) => {
@@ -113,6 +114,8 @@ export default function sudoku(state = null, action) {
       } = state;
 
       const { cellsLeft, data, completed } = boards[level];
+
+      const { cellColors } = getCurMode();
 
       if (completed) {
         return state;
@@ -207,6 +210,7 @@ export default function sudoku(state = null, action) {
     case SET_CELL: {
       const { pos, value } = action;
       const { boards, level } = state;
+      const { cellColors } = getCurMode();
 
       const { x, y } = pos;
       const nextBoard = { ...boards };

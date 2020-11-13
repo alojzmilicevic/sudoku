@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   button: {
-    color: props => (props.completed ? 'transparent' : theme.palette.primary.fadeColor),
+    color: props => (props.completed ? 'transparent' : theme.palette.primary.textColor),
     minWidth: 0,
     padding: '5px 5px',
 

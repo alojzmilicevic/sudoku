@@ -9,10 +9,10 @@ const useStyles = makeStyles(theme => ({
     width: '90%',
     minHeight: 40,
     marginTop: theme.spacing(1),
-    color: theme.palette.primary.lightFadeColor,
-    border: `1px solid ${theme.palette.primary.fadeColor}`,
+    color: theme.palette.primary.textColor,
+    border: `1px solid ${theme.palette.primary.lightFadeColor}`,
     '&:hover': {
-      border: `1px solid ${theme.palette.primary.darkColor}`,
+      border: `1px solid ${theme.palette.primary.lightFadeColor}`,
     },
     textTransform: 'none',
   },

@@ -6,8 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(theme => ({
   button: {
     backgroundColor: 'transparent',
-    color: props => (props.selected ? theme.additionalPalette.textButton.selected
-      : theme.additionalPalette.textButton.main),
+    color: props => (props.selected ? theme.palette.primary.textColor
+      : theme.palette.primary.fadeColor),
     fontWeight: props => (props.selected ? 'bold' : '500'),
     textTransform: 'none',
     borderBottom: props => (props.showBorder ? `1px solid ${theme.palette.primary.fadeColor}` : ''),
@@ -17,7 +17,8 @@ const useStyles = makeStyles(theme => ({
     fontSize: '1.2em',
 
     '&:hover': {
-      color: theme.additionalPalette.textButton.hover,
+      color: theme.palette.primary.textColor,
+      fontWeight: 'bold',
       backgroundColor: 'transparent',
     },
   },
