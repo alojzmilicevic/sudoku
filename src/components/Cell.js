@@ -146,8 +146,10 @@ const Cell = (props) => {
     <div
       style={{ backgroundColor: color }}
       onMouseMove={mouseMove}
-      onMouseDown={() => {
-        clearSelectedCells();
+      onMouseDown={(e) => {
+        if (!e.ctrlKey) {
+          clearSelectedCells();
+        }
         addToSelectedCells(id);
       }}
 

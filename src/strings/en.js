@@ -30,7 +30,18 @@ const en = {
       + 'Use Normal Mode to enter numbers you are confident about. '
       + 'Use Note Mode to add or remove multiple possibilities for a square. '
       + 'Use Color mode to add or remove colors to squares\n\n'
+      + '- Click and drag to mark cells, hold down the Ctrl key to add more marked cells.\n'
+      + '- Use arrows or W/A/S/D to navigate the board.\n'
+      + '- Press Tab to change your primary tool.\n'
+      + '- Hold down Shift to go into Note mode.\n'
+      + '- Hold down Alt to go into normal mode.\n'
       + '3 Sudokus (Easy, Medium, and Hard) are released daily at 10:00 p.m. ET.',
+  },
+
+  keyboard: {
+    normal: 'Normal',
+    note: 'Note',
+    color: 'Color',
   },
 
   months: {

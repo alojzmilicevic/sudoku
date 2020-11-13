@@ -4,6 +4,7 @@ export const Modifiers = {
   CTRL: 'Control',
   ALT: 'Alt',
   DEL: 'Delete',
+  TAB: 'Tab',
 };
 
 export const Directions = {

@@ -25,12 +25,23 @@ const sv = {
 
   modals: {
     howToPlayHeader: 'Hur funkar det',
-    howToPlayText: 'Fill the grid with your keyboard so that every row, '
-      + 'column and 3×3 box contains the digits 1 to 9, without repeating.\n\n'
-      + 'Use Normal Mode to enter numbers you are confident about. '
-      + 'Use Note Mode to add or remove multiple possibilities for a square. '
-      + 'Use Color mode to add or remove colors to squares\n\n'
-      + '3 Sudokus (Easy, Medium, and Hard) are released daily at 10:00 p.m. ET.',
+    howToPlayText: 'Fyll brädet med hjälp av tangentbordet så att varje rad, '
+      + 'kolumn och 3×3 box innehåller alla siffror mellan 1 och 9, utan upprepning.\n\n'
+      + 'Använd Normal-Mode för att skriva in siffror du känner dig säker på. '
+      + 'Använd Kandidat-Mode för att lägga till eller ta bort möjliga siffror som kan vara i en box. '
+      + 'Använd Färg-Mode för lägga till eller ta bort en färg i en ruta\n\n'
+      + '- Dra med musen för att markera celler, håll i Ctrl för att lägga till markerkade rutor.\n'
+      + '- Använd Piltangenterna eller W/A/S/D för att ändra markerad ruta.\n'
+      + '- Tryck Tab för att byta Primärt verktyg.\n'
+      + '- Håll i Shift för att gå in i Kandidat-mode.\n'
+      + '- Håll i Alt för att gå in i Normal-mode.\n'
+      + '3 Sudokus (Lätt, Medel och Svår) släpps varje dag klockan 10.00 svensk tid.',
+  },
+
+  keyboard: {
+    normal: 'Normal',
+    note: 'Kandidat',
+    color: 'Färg',
   },
 
   months: {

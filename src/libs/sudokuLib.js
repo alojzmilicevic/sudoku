@@ -19,7 +19,7 @@ import Tools from '../constants/tools';
 import { Modifiers, Directions } from '../constants/keyboard';
 import { getDefaultTool } from '../reducers/tools';
 import { getLastSelected, getTotalSelected } from '../reducers/selected';
-import { setCurrentTool } from '../actions/tools';
+import { setCurrentTool, setDefaultTool } from '../actions/tools';
 import { changeLastSelected, clearSelectedCells, setSelectedToLastSelected } from '../actions/selected';
 import AppState from '../constants/appStates';
 import { setAppState } from '../actions/client';
@@ -41,12 +41,14 @@ export default class Client {
   handleKeyDown(event) {
     const { key, direction } = event;
 
-    if (key === Modifiers.CTRL) {
+    const defaultTool = getDefaultTool(this.getState());
+    const totalTools = Object.keys(Tools).length;
+    if (key === Modifiers.ALT) {
       this.dispatch(setCurrentTool(Tools.NUMBER));
     } else if (key === Modifiers.SHIFT) {
       this.dispatch(setCurrentTool(Tools.NOTE));
-    } else if (key === Modifiers.ALT) {
-      this.dispatch(setCurrentTool(Tools.COLOR));
+    } else if (key === Modifiers.TAB) {
+      this.dispatch(setDefaultTool((defaultTool + 1) % totalTools));
     } else if (key >= 1 && key <= 9) {
       this.setSudokuData(key);
     } else if (key === Modifiers.BACKSPACE || key === Modifiers.DEL) {

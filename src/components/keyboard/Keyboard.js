@@ -7,7 +7,8 @@ import Tools from '../../constants/tools';
 import Button from '../buttons/Button';
 import { setDefaultTool } from '../../actions/tools';
 import { getCurrentTool } from '../../reducers/tools';
-import ClearButton from "../ClearButton";
+import ClearButton from '../ClearButton';
+import strings from '../../strings/main';
 
 const useStyles = makeStyles({
   root: {
@@ -57,9 +58,24 @@ const Keyboard = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.control}>
-        <Button onClick={() => setNumberTool()} text="Normal" selected={currentTool === Tools.NUMBER} />
-        <Button onClick={() => setNotesTool()} text="Note" selected={currentTool === Tools.NOTE} />
-        <Button onClick={() => setColorTool()} text="Color" selected={currentTool === Tools.COLOR} />
+        <Button
+          style={{ marginRight: 5 }}
+          onClick={() => setNumberTool()}
+          text={strings.keyboard.normal}
+          selected={currentTool === Tools.NUMBER}
+        />
+        <Button
+          style={{ marginLeft: 5, marginRight: 5 }}
+          onClick={() => setNotesTool()}
+          text={strings.keyboard.note}
+          selected={currentTool === Tools.NOTE}
+        />
+        <Button
+          style={{ marginLeft: 5 }}
+          onClick={() => setColorTool()}
+          text={strings.keyboard.color}
+          selected={currentTool === Tools.COLOR}
+        />
       </div>
       <Grid />
     </div>
