@@ -183,6 +183,8 @@ export default function sudoku(state = null, action) {
             if (!notes.includes(numberValue)) {
               notes.push(numberValue);
               notes.sort();
+            } else {
+              notes.splice(notes.indexOf(numberValue), 1);
             }
             break;
           }
