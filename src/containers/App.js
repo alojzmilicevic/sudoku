@@ -1,35 +1,30 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider } from '@material-ui/core';
-import { init } from '../actions/client';
 import AppState from '../constants/appStates';
 import LoadingIndicator from '../components/LoadingSpinner';
 import Client from './Client';
 import { createTheme } from '../theme/theme';
+import { loadSudoku } from '../actions/sudoku';
 
-class App extends Component {
-  componentDidMount() {
-    const { init, match } = this.props;
+function App(props) {
+  const { appState, loadSudoku } = props;
+  const appTheme = createTheme();
 
-    const { sudokuId } = match.params;
-    init(sudokuId);
+  useEffect(() => {
+    loadSudoku();
+  }, [loadSudoku]);
+
+  if (appState && appState !== AppState.FETCHING_SESSION) {
+    return (
+      <MuiThemeProvider theme={appTheme}>
+        <Client />
+      </MuiThemeProvider>
+    );
   }
 
-  render() {
-    const { appState } = this.props;
-
-    const appTheme = createTheme();
-    if (appState && appState !== AppState.FETCHING_SESSION) {
-      return (
-        <MuiThemeProvider theme={appTheme}>
-          <Client />
-        </MuiThemeProvider>
-      );
-    }
-
-    return <LoadingIndicator />;
-  }
+  return <LoadingIndicator />;
 }
 
 const mapStateToProps = state => ({
@@ -37,12 +32,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  init: sudokuId => dispatch(init(sudokuId)),
+  loadSudoku: () => dispatch(loadSudoku()),
 });
 
 App.propTypes = {
-  init: PropTypes.func.isRequired,
-  match: PropTypes.objectOf(PropTypes.any).isRequired,
+  loadSudoku: PropTypes.func.isRequired,
   appState: PropTypes.string.isRequired,
 };
 

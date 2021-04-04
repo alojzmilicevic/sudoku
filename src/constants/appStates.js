@@ -1,4 +1,4 @@
-export default {
+const AppState = {
   FETCHING_SESSION: 'FETCHING_SESSION',
 
   READY_TO_PLAY: 'READY_TO_PLAY',
@@ -13,4 +13,8 @@ export default {
 
   // When sudoku game is correct and completed this will be the state.
   GAME_COMPLETED: 'GAME_COMPLETED',
+
+  LOGGING_IN: 'LOGGING_IN',
 };
+
+export default AppState;

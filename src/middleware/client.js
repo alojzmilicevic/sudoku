@@ -1,16 +1,24 @@
 import Client from '../libs/lib';
 import { INIT } from '../actions/client';
+import { LOGIN_FAILED, LOGIN_SUCCESS } from '../actions/login';
+
+let client;
 
 export default store => next => (action) => {
   switch (action.type) {
     case INIT:
-      // eslint-disable-next-line no-unused-vars,no-case-declarations
-      const client = new Client(
+      client = new Client(
         store,
         store.dispatch,
-        action.sudokuId,
       );
       next(action);
+      break;
+
+    case LOGIN_SUCCESS:
+      client.onLoginSuccess();
+      break;
+    case LOGIN_FAILED:
+      client.onLoginFailed();
       break;
     default:
       return next(action);

@@ -27,7 +27,7 @@ export const apiError = error => ({
 });
 
 export function apiAction({
-  url = '', method = 'GET', data = null, label = '',
+  url = '', method = 'GET', data = null, label = '', appState = '',
   onSuccess = () => {
   }, onFailure = () => {
   },
@@ -41,6 +41,7 @@ export function apiAction({
       onSuccess,
       onFailure,
       label,
+      appState,
     },
   };
 }

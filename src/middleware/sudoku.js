@@ -1,14 +1,15 @@
-import { INIT } from '../actions/client';
 import Client from '../libs/sudokuLib';
 import { HANDLE_KEY_DOWN, HANDLE_KEY_UP } from '../actions/keys';
-import { SET_SUDOKU_DATA, SOLVE_CELL, SOLVE_SUDOKU } from '../actions/sudoku';
+import {
+  LOAD_SUDOKU, SET_SUDOKU_DATA, SOLVE_CELL, SOLVE_SUDOKU,
+} from '../actions/sudoku';
 
 let sudokuClient = null;
 
 export default store => next => (action) => {
   const { modalType } = store.getState();
   switch (action.type) {
-    case INIT: {
+    case LOAD_SUDOKU: {
       // eslint-disable-next-line no-unused-vars,no-case-declarations
       sudokuClient = new Client(
         store,

@@ -15,6 +15,15 @@ const initialBoardData = {
 };
 
 const initialState = {
+  history: [
+    {
+      boards: {
+        [Levels.EASY]: { ...initialBoardData },
+        [Levels.MEDIUM]: { ...initialBoardData },
+        [Levels.HARD]: { ...initialBoardData },
+      },
+    },
+  ],
   boards: {
     [Levels.EASY]: { ...initialBoardData },
     [Levels.MEDIUM]: { ...initialBoardData },
@@ -30,6 +39,7 @@ const initialState = {
   modalType: null,
   modalProps: {},
   settings: { ...settingsInitialState },
+  currentPos: 0,
 };
 
 export default reduceReducers(initialState, selected, client, sudoku, tools, modal, settings);

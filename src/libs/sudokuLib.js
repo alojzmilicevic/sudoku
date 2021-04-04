@@ -25,6 +25,7 @@ import AppState from '../constants/appStates';
 import { setAppState } from '../actions/client';
 import { showModal } from '../actions/modal';
 import { ModalTypes } from '../components/modals/Modal';
+import * as SudokuApi from '../api/sudoku';
 
 const MoveKeys = ['a', 'd', 's', 'w', 'A', 'D', 'S', 'W', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
@@ -36,6 +37,18 @@ export default class Client {
   constructor(store, dispatch) {
     this.store = store;
     this.dispatch = dispatch;
+
+    this.makeInitialRequests();
+  }
+
+  async makeInitialRequests() {
+    try {
+      this.setAppState(AppState.FETCHING_SESSION);
+      await this.dispatch(SudokuApi.fetchSudoku());
+      this.setAppState(AppState.READY_TO_PLAY);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   handleKeyDown(event) {
@@ -63,14 +76,7 @@ export default class Client {
   setAppState(appState) {
     // const oldAppState = this.getAppState();
 
-    switch (appState) {
-      case AppState.GAME_COMPLETED:
-        this.dispatch(setAppState(appState));
-        break;
-
-      default:
-        break;
-    }
+    this.dispatch(setAppState(appState));
   }
 
   handleKeyUp(event) {

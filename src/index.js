@@ -15,6 +15,8 @@ import reducers from './reducers';
 import client from './middleware/client';
 import sudoku from './middleware/sudoku';
 import apiMiddleware from './middleware/api';
+import SignIn from './views/login';
+import Backend from './helpers/Backend';
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
@@ -32,11 +34,16 @@ ReactDOM.render(
   <React.StrictMode>
     <CssBaseline>
       <Provider store={store}>
-        <Router>
-          <Switch>
-            <Route exact path="/" render={props => <App {...props} />} />
-          </Switch>
-        </Router>
+        <Backend>
+          <Router>
+            <Switch>
+              <Route exact path="/" render={props => <App {...props} />} />
+              <Route path="/login">
+                <SignIn />
+              </Route>
+            </Switch>
+          </Router>
+        </Backend>
       </Provider>
     </CssBaseline>
   </React.StrictMode>,

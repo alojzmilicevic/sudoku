@@ -18,7 +18,6 @@ const useStyles = makeStyles(theme => ({
 
     '&:hover': {
       color: theme.palette.primary.textColor,
-      fontWeight: 'bold',
       backgroundColor: 'transparent',
     },
   },

@@ -9,11 +9,17 @@ export const SET_LEVEL = 'SET_LEVEL';
 export const INCREMENT_TIME = 'INCREMENT_TIME';
 export const CLEAR_BOARD = 'CLEAR_BOARD';
 export const SET_CELL = 'SET_CELL';
+export const LOAD_SUDOKU = 'LOAD_SUDOKU';
+
+export const loadSudoku = () => ({
+  type: LOAD_SUDOKU,
+});
 
 export const setSudoku = data => ({
   type: SET_SUDOKU_SESSION,
   payload: data,
 });
+
 export const clearCellData = () => ({
   type: CLEAR_CELL_DATA,
 });

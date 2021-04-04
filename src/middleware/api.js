@@ -3,6 +3,7 @@ import {
   API,
   accessDenied, apiError, apiStart, apiEnd,
 } from '../actions/api';
+import { setAppState } from '../actions/client';
 
 
 const apiMiddleware = ({ dispatch }) => next => (action) => {
@@ -17,6 +18,7 @@ const apiMiddleware = ({ dispatch }) => next => (action) => {
     onFailure,
     label,
     headers,
+    appState,
   } = action.payload;
 
   const dataOrParams = ['GET', 'DELETE'].includes(method) ? 'params' : 'data';
@@ -28,6 +30,10 @@ const apiMiddleware = ({ dispatch }) => next => (action) => {
 
   if (label) {
     dispatch(apiStart(label));
+  }
+
+  if (appState) {
+    dispatch(setAppState(appState));
   }
 
   // eslint-disable-next-line consistent-return
